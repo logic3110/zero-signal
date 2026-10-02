@@ -1,0 +1,20 @@
+- table_id: emergency-numbers
+  kind: emergency_numbers
+  title: Emergency numbers by country
+  source_id: zs-emergency-numbers
+  data:
+    verified_at: "2026-09-30"
+    note: Re-verify every number against official government sources before each release.
+    countries:
+      IN: {name: India, general: "112", ambulance: "108", police: "112", fire: "101", disaster: "1078", women: "1091", roadside: "1033", other: {"Child helpline": "1098", "Ambulance (alt)": "102", "State disaster": "1070"}}
+      US: {name: United States, general: "911", ambulance: "911", police: "911", fire: "911", disaster: "911", other: {"Poison control": "1-800-222-1222", "Suicide & crisis": "988"}}
+      CA: {name: Canada, general: "911", ambulance: "911", police: "911", fire: "911", disaster: "911", other: {"Suicide crisis": "988"}}
+      GB: {name: United Kingdom, general: "999", ambulance: "999", police: "999", fire: "999", disaster: "999", other: {"EU standard": "112", "NHS non-emergency": "111", "Police non-emergency": "101"}}
+      EU: {name: European Union (most countries), general: "112", ambulance: "112", police: "112", fire: "112", disaster: "112"}
+      AU: {name: Australia, general: "000", ambulance: "000", police: "000", fire: "000", disaster: "132 500", other: {"From mobile": "112"}}
+      NZ: {name: New Zealand, general: "111", ambulance: "111", police: "111", fire: "111", disaster: "111"}
+      NP: {name: Nepal, general: "100", ambulance: "102", police: "100", fire: "101", disaster: "100", other: {"Tourist police": "1144"}}
+      BD: {name: Bangladesh, general: "999", ambulance: "999", police: "999", fire: "999", disaster: "999"}
+      LK: {name: Sri Lanka, general: "119", ambulance: "1990", police: "119", fire: "110", disaster: "117"}
+      PK: {name: Pakistan, general: "1122", ambulance: "1122", police: "15", fire: "16", disaster: "1122"}
+      AE: {name: United Arab Emirates, general: "999", ambulance: "998", police: "999", fire: "997", disaster: "999"}

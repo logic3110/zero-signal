@@ -1,0 +1,15 @@
+- table_id: water-purification
+  kind: water_purification
+  title: Water purification reference
+  source_id: cdc-emergency
+  data:
+    boil:
+      - {max_altitude_m: 2000, rolling_boil_minutes: 1}
+      - {max_altitude_m: 99999, rolling_boil_minutes: 3}
+    bleach:
+      note: Unscented household bleach only. Double the dose for cloudy or very cold water. Wait at least 30 minutes.
+      drops_per_litre:
+        - {concentration: "5-6%", clear: 2, cloudy: 4}
+        - {concentration: "8.25%", clear: 2, cloudy: 3}
+      wait_minutes: 30
+    sodis: {clear_sun_hours: 6, cloudy_days: 2, max_bottle_litres: 2}

@@ -1,0 +1,91 @@
+# Starter gold evaluation set (US-17.1). The PRD target is >= 100 questions
+# per domain with expert-approved reference answers; grow this file as
+# reviewers sign off. Kinds: answer | emergency | out_of_scope | not_in_library
+items:
+  # ---------------------------------------------------------------- medical
+  - {id: med-001, kind: emergency, question: "my dad collapsed and is not breathing", expected_guides: [med-cpr-adult], expected_card: pc-cpr}
+  - {id: med-002, kind: emergency, question: "baby not breathing what do i do", expected_guides: [med-cpr-child-infant], expected_card: pc-cpr-infant}
+  - {id: med-003, kind: emergency, question: "someone is choking on food", expected_guides: [med-choking], expected_card: pc-choking}
+  - {id: med-004, kind: emergency, question: "deep cut on leg bleeding heavily won't stop", expected_guides: [med-severe-bleeding], expected_card: pc-severe-bleeding}
+  - {id: med-005, kind: emergency, question: "bee sting and her throat is swelling", expected_guides: [med-anaphylaxis], expected_card: pc-anaphylaxis}
+  - {id: med-006, kind: emergency, question: "crushing chest pain spreading to left arm", expected_guides: [med-heart-attack], expected_card: pc-heart-attack}
+  - {id: med-007, kind: emergency, question: "his face is drooping and speech is slurred", expected_guides: [med-stroke], expected_card: pc-stroke}
+  - {id: med-008, kind: emergency, question: "my son is having fits", expected_guides: [med-seizures], expected_card: pc-seizure}
+  - {id: med-009, kind: emergency, question: "snake bit my brother on the ankle", expected_guides: [med-snakebite], expected_card: pc-snakebite}
+  - {id: med-010, kind: emergency, question: "child drank kerosene", expected_guides: [med-poisoning], expected_card: pc-poisoning}
+  - {id: med-011, kind: emergency, question: "boiling water spilled on arm, bad burn", expected_guides: [med-burns], expected_card: pc-burns}
+  - {id: med-012, kind: emergency, question: "worker collapsed in the heat and is confused", expected_guides: [med-heat-illness], expected_card: pc-heatstroke}
+  - {id: med-013, kind: emergency, question: "pulled a kid out of the lake unconscious", expected_guides: [med-drowning, med-cpr-child-infant], expected_card: pc-drowning}
+  - {id: med-014, kind: emergency, question: "diabetic friend shaking and confused, low sugar", expected_guides: [med-diabetic-emergency], expected_card: pc-diabetic}
+  - {id: med-015, kind: emergency, question: "asthma attack and inhaler not working", expected_guides: [med-asthma], expected_card: pc-asthma}
+  - {id: med-016, kind: emergency, question: "dil ka daura", expected_card: pc-heart-attack}
+  - {id: med-017, kind: emergency, question: "सांप ने काटा", expected_card: pc-snakebite}
+  - {id: med-018, kind: answer, question: "how do I treat a minor cut", expected_guides: [med-wounds-infection]}
+  - {id: med-019, kind: answer, question: "twisted my ankle on the trail", expected_guides: [med-sprains]}
+  - {id: med-020, kind: answer, question: "friend fell and hit his head", expected_guides: [med-head-injury]}
+  - {id: med-021, kind: answer, question: "headache and nausea at 4000 m on a trek", expected_guides: [med-altitude-sickness]}
+  - {id: med-022, kind: answer, question: "how to make ORS at home for diarrhoea", expected_guides: [med-dehydration-ors]}
+  - {id: med-023, kind: answer, question: "baby has high fever", expected_guides: [med-fever-children], patient_type: infant}
+  - {id: med-024, kind: answer, question: "dog bite what should I do", expected_guides: [med-bites-stings-rabies]}
+  - {id: med-025, kind: answer, question: "chemical splashed in my eye", expected_guides: [med-eye-injuries]}
+  - {id: med-026, kind: answer, question: "tooth knocked out", expected_guides: [med-dental-trauma]}
+  - {id: med-027, kind: answer, question: "person is unconscious but breathing", expected_guides: [med-recovery-position]}
+  - {id: med-028, kind: answer, question: "many injured people after bus crash who do I help first", expected_guides: [med-triage-start, veh-accident-scene]}
+  - {id: med-029, kind: answer, question: "friend having a panic attack", expected_guides: [med-mental-health-crisis]}
+  - {id: med-030, kind: answer, question: "how to splint a broken arm", expected_guides: [med-fractures]}
+  - {id: med-031, kind: answer, question: "frostbite on toes", expected_guides: [med-hypothermia-frostbite]}
+  - {id: med-032, kind: answer, question: "touched a live wire and got a shock", expected_guides: [med-electric-shock]}
+  - {id: med-033, kind: answer, question: "what is first aid", expected_guides: [med-first-aid-basics]}
+  - {id: med-034, kind: answer, question: "first aid", expected_guides: [med-first-aid-basics]}
+  - {id: med-035, kind: answer, question: "how do I treat a bee sting", expected_guides: [med-bee-wasp-stings]}
+  - {id: med-036, kind: answer, question: "stung by a wasp and my arm is swelling", expected_guides: [med-bee-wasp-stings]}
+  # --------------------------------------------------------------- survival
+  - {id: sur-001, kind: emergency, question: "we are lost in the forest", expected_guides: [sur-lost], expected_card: pc-lost}
+  - {id: sur-002, kind: emergency, question: "flood water entering the house", expected_guides: [sur-flood], expected_card: pc-flood}
+  - {id: sur-003, kind: emergency, question: "earthquake what to do", expected_guides: [sur-earthquake], expected_card: pc-earthquake}
+  - {id: sur-004, kind: emergency, question: "forest fire coming towards our village", expected_guides: [sur-wildfire], expected_card: pc-wildfire}
+  - {id: sur-005, kind: emergency, question: "thunderstorm and lightning on the ridge", expected_guides: [sur-lightning], expected_card: pc-lightning}
+  - {id: sur-006, kind: answer, question: "how to purify stream water", expected_guides: [sur-water]}
+  - {id: sur-007, kind: answer, question: "how do I start a fire", expected_guides: [sur-fire]}
+  - {id: sur-008, kind: answer, question: "build a shelter for the night", expected_guides: [sur-shelter, sur-first-night]}
+  - {id: sur-009, kind: answer, question: "how to find north without a compass", expected_guides: [sur-navigation]}
+  - {id: sur-010, kind: answer, question: "how to signal a helicopter for rescue", expected_guides: [sur-signalling]}
+  - {id: sur-011, kind: answer, question: "how to tie a bowline", expected_guides: [sur-knots]}
+  - {id: sur-012, kind: answer, question: "is food in the fridge safe after a power cut", expected_guides: [sur-food-safety, sur-power-outage]}
+  - {id: sur-013, kind: answer, question: "cyclone warning tomorrow how to prepare", expected_guides: [sur-cyclone]}
+  - {id: sur-014, kind: answer, question: "what to pack in an emergency go bag", expected_guides: [sur-evacuation]}
+  - {id: sur-015, kind: answer, question: "heatwave safety for elderly parents", expected_guides: [sur-heatwave]}
+  - {id: sur-016, kind: answer, question: "leopard spotted near camp", expected_guides: [sur-dangerous-animals]}
+  - {id: sur-017, kind: answer, question: "rumbling sound and cracks on the hill during rain", expected_guides: [sur-landslide]}
+  - {id: sur-018, kind: answer, question: "is tap water safe after the flood", expected_guides: [sur-water-contamination, sur-flood]}
+  # ---------------------------------------------------------------- vehicle
+  - {id: veh-001, kind: emergency, question: "smoke and flames from the bonnet", expected_guides: [veh-vehicle-fire], expected_card: pc-vehicle-fire}
+  - {id: veh-002, kind: emergency, question: "brakes failed going downhill", expected_guides: [veh-brakes], expected_card: pc-brake-failure}
+  - {id: veh-003, kind: emergency, question: "car stalled on the railway crossing", expected_guides: [veh-railway-crossing], expected_card: pc-railway}
+  - {id: veh-004, kind: emergency, question: "tyre burst on the highway at speed", expected_guides: [veh-tyre-burst], expected_card: pc-tyre-burst}
+  - {id: veh-005, kind: emergency, question: "car accident with injured people", expected_guides: [veh-accident-scene], expected_card: pc-accident}
+  - {id: veh-006, kind: answer, question: "car won't start clicking noise", expected_guides: [veh-dead-battery, veh-jump-start]}
+  - {id: veh-007, kind: answer, question: "how to jump start a car", expected_guides: [veh-jump-start]}
+  - {id: veh-008, kind: answer, question: "how to change a flat tyre", expected_guides: [veh-flat-tyre]}
+  - {id: veh-009, kind: answer, question: "engine temperature gauge in the red", expected_guides: [veh-overheating, veh-warning-lights]}
+  - {id: veh-010, kind: answer, question: "check engine light is flashing", expected_guides: [veh-warning-lights]}
+  - {id: veh-011, kind: answer, question: "green fluid leaking under the car", expected_guides: [veh-leaks]}
+  - {id: veh-012, kind: answer, question: "put petrol in my diesel car", expected_guides: [veh-wrong-fuel]}
+  - {id: veh-013, kind: answer, question: "car stuck in mud wheels spinning", expected_guides: [veh-stuck]}
+  - {id: veh-014, kind: answer, question: "bike chain came off", expected_guides: [veh-two-wheeler]}
+  - {id: veh-015, kind: answer, question: "headlights stopped working at night", expected_guides: [veh-headlights, veh-fuses]}
+  - {id: veh-016, kind: answer, question: "grinding noise when braking", expected_guides: [veh-brakes, veh-noises-smells]}
+  - {id: veh-017, kind: answer, question: "electric car battery smoking", expected_guides: [veh-ev-hybrid]}
+  - {id: veh-018, kind: answer, question: "how to tow a car with a rope", expected_guides: [veh-towing]}
+  # ------------------------------------------------- refusals / not covered
+  - {id: oos-001, kind: out_of_scope, question: "write a python function to sort a list"}
+  - {id: oos-002, kind: out_of_scope, question: "who won the election"}
+  - {id: oos-003, kind: out_of_scope, question: "what is the capital of france"}
+  - {id: oos-004, kind: out_of_scope, question: "recommend a good movie"}
+  - {id: oos-005, kind: out_of_scope, question: "should I buy bitcoin"}
+  - {id: oos-006, kind: out_of_scope, question: "tell me a joke"}
+  - {id: oos-007, kind: out_of_scope, question: "how to bake a chocolate cake"}
+  - {id: nil-001, kind: not_in_library, question: "how to treat a sunburn on my dog"}
+  - {id: nil-002, kind: not_in_library, question: "how do I replace the timing belt on a 2015 diesel"}
+  - {id: nil-003, kind: not_in_library, question: "dose of amoxicillin for ear infection"}
+  - {id: nil-004, kind: not_in_library, question: "how to build a log cabin"}

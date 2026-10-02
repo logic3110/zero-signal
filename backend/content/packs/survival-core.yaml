@@ -1,0 +1,24 @@
+pack_id: survival-core
+version: "2026.09.0"
+title: "Survival and disaster core"
+description: "Wilderness survival priorities, water, fire, shelter, navigation and signalling, plus household disaster guidance (flood, cyclone, earthquake, heatwave)."
+domain: survival
+language: en
+region: global
+min_app_version: "0.1.0"
+created_at: "2026-09-30T00:00:00Z"
+sources_file: ../sources.yaml
+reviewer_signoff: null   # set to "<role>, <date>" after expert review; required by --release
+inputs:
+  guides: ["../guides/survival/*.md"]
+  protocol_cards: ["../protocol_cards/survival.yaml"]
+  trees: ["../trees/survival-*.yaml"]
+  tables: ["../tables/survival-*.yaml"]
+  synonyms: ["../synonyms/en.yaml"]
+chunking:
+  target_tokens: 380
+  max_tokens: 520
+  overlap_ratio: 0.12
+embedding:
+  model_id: zs-hash-v1
+  dim: 384

@@ -1,0 +1,19 @@
+# Python
+backend/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+backend/*.egg-info/
+backend/dist/
+backend/keys/
+*.pem
+
+# Web
+web/node_modules/
+web/dist/
+web/public/packs/
+
+.DS_Store
+
+# Secrets
+backend/.env

@@ -1,0 +1,141 @@
+- card_id: pc-vehicle-fire
+  domain: vehicle
+  order: 1
+  title: Vehicle fire
+  subtitle: Smoke or flames from the vehicle
+  icon: car-fire
+  trigger_terms: [car on fire, car fire, vehicle fire, bike on fire, engine fire, smoke from bonnet, smoke from hood, smoke from engine, flames from car, flames from bonnet, flames from hood, flames under bonnet, fire under bonnet, fire under hood, smoke and flames, gaadi mein aag, गाड़ी में आग]
+  steps:
+    - text: Pull over, stop, engine OFF.
+    - text: Everyone out - move 30 m away, upwind.
+    - text: Call the fire service.
+    - text: Warn traffic from a safe distance.
+    - text: Small fire and a clear escape? Extinguisher through the grille - bonnet closed.
+  do_not:
+    - Do not open the bonnet
+    - Do not go back for belongings
+  emergency_number_key: fire
+  related_guides: [veh-vehicle-fire]
+  sources: [zs-original, nhtsa-safety]
+
+- card_id: pc-accident
+  domain: vehicle
+  order: 2
+  title: Accident scene
+  subtitle: Crash with injured people
+  icon: car-crash
+  trigger_terms: [accident, car accident, road accident, crash, car crash, bike accident, collision, hit by a car, hit by car, durghatna, दुर्घटना, एक्सीडेंट]
+  steps:
+    - text: Hazard lights on. Park safely away from the crash.
+    - text: Warn traffic - triangles well back.
+    - text: Call the emergency number - location, number injured, hazards.
+    - text: Engines off, handbrakes on, no smoking.
+    - text: Check the quiet casualties first - breathing, bleeding.
+    - text: Suspected neck injury - do not move unless in danger.
+  do_not:
+    - Do not remove a motorcyclist's helmet unless they are not breathing
+    - Do not stand in the path of traffic
+  tools: [my-location]
+  emergency_number_key: ambulance
+  related_guides: [veh-accident-scene, med-triage-start, med-severe-bleeding]
+  sources: [zs-original, nhtsa-safety]
+
+- card_id: pc-brake-failure
+  domain: vehicle
+  order: 3
+  title: Brake failure
+  subtitle: Pedal soft or to the floor
+  icon: brake
+  trigger_terms: [brake failure, brakes failed, brakes not working, no brakes, brake pedal to the floor, brake fail, brake nahi lag, ब्रेक फेल]
+  steps:
+    - text: Pump the brake pedal fast.
+    - text: Off the accelerator. Hazards on, horn.
+    - text: Shift down one gear at a time.
+    - text: Handbrake - gradually and firmly.
+    - text: Steer to a safe run-off - uphill, gravel, bushes.
+  do_not:
+    - Do not switch off the engine while moving
+    - Do not yank the handbrake at speed
+  emergency_number_key: roadside
+  related_guides: [veh-brakes]
+  sources: [zs-original, nhtsa-safety]
+
+- card_id: pc-railway
+  domain: vehicle
+  order: 4
+  title: Stuck on railway crossing
+  subtitle: Stalled on the tracks
+  icon: train
+  trigger_terms: [stuck on railway, stuck on tracks, stalled on railway crossing, stalled on tracks, car on railway track, railway crossing, level crossing stuck]
+  steps:
+    - text: Everyone OUT now.
+    - text: Move away at an angle, TOWARDS the direction the train is coming from.
+    - text: Call the emergency number with the crossing location.
+    - text: Alert a gatekeeper if there is one.
+  do_not:
+    - Do not stay in or try to restart the vehicle
+  emergency_number_key: police
+  related_guides: [veh-railway-crossing]
+  sources: [zs-original, nhtsa-safety]
+
+- card_id: pc-vehicle-water
+  domain: vehicle
+  order: 5
+  title: Vehicle in water
+  subtitle: Car sinking - get out now
+  icon: car-water
+  trigger_terms: [car in water, car sinking, car underwater, vehicle in water, drove into water, car in river, car in lake, submerged car]
+  steps:
+    - text: SEATBELT off.
+    - text: WINDOW open or break a side window.
+    - text: CHILDREN out first, oldest first.
+    - text: OUT - climb out, swim or get on the roof.
+    - text: Call for help once out.
+  do_not:
+    - Do not try the doors
+    - Do not phone before escaping
+  emergency_number_key: ambulance
+  related_guides: [veh-vehicle-in-water]
+  sources: [zs-original, nhtsa-safety]
+
+- card_id: pc-overheating
+  domain: vehicle
+  order: 6
+  title: Overheating
+  subtitle: Temperature gauge high or steam
+  icon: thermometer
+  call_first: false
+  trigger_terms: [engine overheating, overheating, temperature gauge high, temperature gauge red, steam from bonnet, steam from hood, radiator boiling, engine hot, car overheating]
+  steps:
+    - text: AC off. Heater and fan to MAX hot.
+    - text: Pull over safely. Engine off.
+    - text: Steam? Keep the bonnet closed until it stops.
+    - text: Wait 30 minutes. Then check coolant level.
+    - text: Top up only when cool. Watch the gauge when driving on.
+  do_not:
+    - Never open the radiator cap when hot
+    - Do not pour cold water on a hot engine
+  emergency_number_key: roadside
+  related_guides: [veh-overheating, veh-belts-hoses]
+  sources: [zs-original, nhtsa-safety]
+
+- card_id: pc-tyre-burst
+  domain: vehicle
+  order: 7
+  title: Tyre burst at speed
+  subtitle: Blowout while driving
+  icon: tyre
+  call_first: false
+  trigger_terms: [tyre burst, tire burst, blowout, tyre blowout, tire blowout, tyre exploded, tire exploded, tyre burst while driving]
+  steps:
+    - text: Grip the wheel firmly. Keep straight.
+    - text: Do NOT brake hard. Ease off the accelerator.
+    - text: Let the car slow down on its own.
+    - text: Below 30 km/h - brake gently, steer to the side.
+    - text: Hazards on, everyone out away from traffic.
+  do_not:
+    - Do not slam the brakes
+    - Do not turn sharply
+  emergency_number_key: roadside
+  related_guides: [veh-tyre-burst, veh-flat-tyre]
+  sources: [zs-original, nhtsa-safety]

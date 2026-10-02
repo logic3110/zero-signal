@@ -1,0 +1,33 @@
+# AI model packs offered to users (US-12.1). Files are hosted with the packs;
+# url/sha256/signature are filled in by the release job once the bake-off
+# (US-17.4) has picked defaults. The web app talks to a local
+# OpenAI-compatible server instead of downloading these into the browser.
+models:
+  - id: compact
+    tier: Compact
+    name: Qwen3.5-2B-Instruct Q4_K_M (candidate)
+    params: 2B
+    quant: Q4_K_M
+    size_bytes: 1400000000
+    ram_required_gb: 6
+    expected_tokens_per_s: "8-12 on 6 GB mid-range"
+    languages: [en, hi]
+    licence: Apache-2.0
+    runtime: llama.cpp (GGUF, mmap)
+    url: null
+    sha256: null
+    status: candidate
+  - id: recommended
+    tier: Recommended
+    name: Qwen3.5-4B-Instruct Q4_K_M (candidate)
+    params: 4B
+    quant: Q4_K_M
+    size_bytes: 2500000000
+    ram_required_gb: 8
+    expected_tokens_per_s: "8-10 on 8 GB mid-range"
+    languages: [en, hi]
+    licence: Apache-2.0
+    runtime: llama.cpp (GGUF, mmap)
+    url: null
+    sha256: null
+    status: candidate

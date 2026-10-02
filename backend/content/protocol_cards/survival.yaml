@@ -1,0 +1,167 @@
+- card_id: pc-lost
+  domain: survival
+  order: 1
+  title: Lost - STOP
+  subtitle: Stop, Think, Observe, Plan
+  icon: compass
+  call_first: false
+  trigger_terms: [i am lost, i'm lost, we are lost, we're lost, lost in the forest, lost in forest, lost on trail, lost on the trail, lost in the mountains, can't find the way, can't find the trail, rasta bhatak, रास्ता भटक, खो गए]
+  steps:
+    - text: STOP moving. Sit, drink, breathe.
+    - text: THINK - where did you last know your position?
+    - text: OBSERVE - trails, streams, sounds. Check My location for coordinates.
+    - text: PLAN - if someone knows your route, STAY PUT.
+    - text: Signal - whistle 3 blasts, bright clothing, SOS flashlight at night.
+    - text: Any signal? Send your coordinates by SMS.
+    - text: Prepare shelter well before dark.
+  do_not:
+    - Do not walk in the dark or fog
+    - Do not split up the group
+  tools: [sos-message, my-location, flashlight, compass]
+  emergency_number_key: general
+  related_guides: [sur-lost, sur-signalling, sur-first-night]
+  sources: [zs-original, atp-3-50-21]
+
+- card_id: pc-flood
+  domain: survival
+  order: 2
+  title: Flood
+  subtitle: Water rising
+  icon: waves
+  trigger_terms: [flood, flooding, flash flood, water rising, water entering house, house flooding, trapped by flood, baadh, बाढ़]
+  steps:
+    - text: Move to higher ground NOW.
+    - text: Switch off electricity and gas if safe.
+    - text: Take water, medicines, phone, documents in plastic.
+    - text: Trapped? Go to the highest floor or roof - signal for help.
+    - text: Never walk or drive through flood water.
+  do_not:
+    - Do not enter moving water - 15 cm can knock you down
+    - Do not touch electrics in water
+  tools: [flashlight, sos-message]
+  emergency_number_key: disaster
+  related_guides: [sur-flood, sur-water-contamination]
+  sources: [zs-original, ndma-india]
+
+- card_id: pc-earthquake
+  domain: survival
+  order: 3
+  title: Earthquake
+  subtitle: Drop, Cover, Hold on
+  icon: quake
+  trigger_terms: [earthquake, quake, tremor, ground shaking, building shaking, bhukamp, भूकंप]
+  steps:
+    - text: DROP to hands and knees.
+    - text: COVER head and neck - under a sturdy table or by an inside wall.
+    - text: HOLD ON until shaking stops.
+    - text: Outdoors - move away from buildings, trees, power lines.
+    - text: After - check injuries, smell for gas, leave damaged buildings by stairs.
+    - text: Trapped? Tap on pipes or use a whistle.
+  do_not:
+    - Do not run outside during shaking
+    - Do not use lifts
+  tools: [flashlight]
+  emergency_number_key: disaster
+  related_guides: [sur-earthquake]
+  sources: [zs-original, ndma-india]
+
+- card_id: pc-cyclone
+  domain: survival
+  order: 4
+  title: Cyclone
+  subtitle: Severe storm or hurricane
+  icon: cyclone
+  trigger_terms: [cyclone, hurricane, typhoon, storm surge, cyclone warning, chakravat, चक्रवात, तूफान]
+  steps:
+    - text: Evacuate coastal and low areas if told to.
+    - text: Shelter in a small inner room, lowest floor that will not flood.
+    - text: Stay away from windows.
+    - text: Wind stops suddenly? That is the eye - stay inside.
+    - text: After - avoid fallen power lines and flood water.
+  do_not:
+    - Do not go out during the storm or the eye
+    - No generators or charcoal stoves indoors
+  emergency_number_key: disaster
+  related_guides: [sur-cyclone]
+  sources: [zs-original, ndma-india]
+
+- card_id: pc-wildfire
+  domain: survival
+  order: 5
+  title: Wildfire
+  subtitle: Forest or bush fire approaching
+  icon: flame
+  trigger_terms: [wildfire, forest fire, bushfire, bush fire, jungle fire, fire approaching, fire coming towards, jangal mein aag, जंगल में आग]
+  steps:
+    - text: Leave early - do not wait to see flames.
+    - text: Move across the wind direction, towards burnt or cleared ground.
+    - text: Never flee uphill ahead of the fire.
+    - text: Damp cloth over nose and mouth. Stay low.
+    - text: Trapped in a car - engine on, windows up, get down under a blanket.
+  do_not:
+    - Do not try to outrun fire uphill
+  emergency_number_key: fire
+  related_guides: [sur-wildfire]
+  sources: [zs-original, fema-ready]
+
+- card_id: pc-lightning
+  domain: survival
+  order: 6
+  title: Lightning
+  subtitle: Thunder heard
+  icon: bolt
+  call_first: false
+  trigger_terms: [lightning, thunderstorm, thunder and lightning, struck by lightning, bijli, बिजली गिर]
+  steps:
+    - text: Get into a building or hard-topped car.
+    - text: Get off peaks, ridges and open ground.
+    - text: Away from lone trees, poles, fences and water.
+    - text: Group - spread out 15 m apart.
+    - text: No shelter - crouch on your pack, feet together, cover ears.
+    - text: Struck person is safe to touch - start CPR if not breathing.
+  do_not:
+    - Do not shelter under a lone tree
+    - Do not lie flat on the ground
+  tools: [cpr-metronome]
+  emergency_number_key: ambulance
+  related_guides: [sur-lightning]
+  sources: [zs-original, wms-guidelines]
+
+- card_id: pc-landslide
+  domain: survival
+  order: 7
+  title: Landslide
+  subtitle: Rumbling, cracking, sliding ground
+  icon: mountain
+  trigger_terms: [landslide, mudslide, rockfall, rocks falling, hill collapsing, bhuskhalan, भूस्खलन]
+  steps:
+    - text: Move away from the slide path - sideways, to higher stable ground.
+    - text: Cannot escape? Curl into a ball and protect your head.
+    - text: Driving - do not stop below steep slopes.
+    - text: After - stay away; more slides may follow.
+  do_not:
+    - Do not cross a damaged road or bridge
+  emergency_number_key: disaster
+  related_guides: [sur-landslide]
+  sources: [zs-original, ndma-india]
+
+- card_id: pc-animal-encounter
+  domain: survival
+  order: 8
+  title: Wild animal encounter
+  subtitle: Big cat, bear, elephant
+  icon: paw
+  call_first: false
+  trigger_terms: [leopard, tiger, bear attack, bear, elephant charging, wild elephant, wild animal, animal attack, charging animal, tendua, तेंदुआ, भालू, हाथी]
+  steps:
+    - text: Stop. Stay calm. Do not run.
+    - text: Face the animal and back away slowly.
+    - text: Big cat - look big, keep eye contact. If attacked, fight back.
+    - text: Bear attack - protect head and neck; fight back if it continues.
+    - text: Elephant - keep far away with an escape route; move behind big obstacles.
+  do_not:
+    - Do not run or turn your back
+    - Do not approach young animals
+  emergency_number_key: general
+  related_guides: [sur-dangerous-animals]
+  sources: [zs-original, atp-3-50-21]

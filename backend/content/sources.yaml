@@ -1,0 +1,84 @@
+# Source registry. Every source MUST have a licence and a permission status
+# before content referencing it can be built (US-15.2, US-16.2, R3).
+# permission: public-domain | open-licence | permission-granted | original | pending
+# `pending` sources may be referenced during development but block --release.
+sources:
+  - source_id: zs-original
+    publisher: ZeroSignal editorial team
+    title: ZeroSignal original guidance (written for this app, pending expert review)
+    licence: CC BY 4.0
+    permission: original
+    version: "2026.09"
+    notes: >-
+      Plain-language guidance written by the ZeroSignal team, aligned with the
+      reference documents cited alongside it. Not copied from any source.
+
+  - source_id: ifrc-ifag-2020
+    publisher: International Federation of Red Cross and Red Crescent Societies (IFRC)
+    title: International First Aid, Resuscitation and Education Guidelines 2020
+    url: https://www.ifrc.org/document/international-first-aid-resuscitation-and-education-guidelines
+    licence: IFRC terms of use - verify redistribution
+    permission: pending
+    version: "2020"
+
+  - source_id: us-army-tc-4-02-1
+    publisher: US Department of the Army
+    title: TC 4-02.1 First Aid
+    licence: Public domain (US Government work)
+    permission: public-domain
+
+  - source_id: who-bec
+    publisher: World Health Organization
+    title: Basic Emergency Care - Approach to the acutely ill and injured
+    url: https://www.who.int/publications/i/item/basic-emergency-care-approach-to-the-acutely-ill-and-injured
+    licence: CC BY-NC-SA 3.0 IGO
+    permission: pending
+    notes: Non-commercial clause must be resolved before any paid distribution.
+
+  - source_id: wms-guidelines
+    publisher: Wilderness Medical Society
+    title: WMS Clinical Practice Guidelines (altitude, cold, heat, drowning, lightning)
+    url: https://wms.org/
+    licence: Journal licence - verify per guideline
+    permission: pending
+
+  - source_id: cdc-emergency
+    publisher: US Centers for Disease Control and Prevention
+    title: CDC emergency preparedness, heat, cold and water guidance
+    url: https://www.cdc.gov/
+    licence: Public domain (US Government work)
+    permission: public-domain
+
+  - source_id: atp-3-50-21
+    publisher: US Department of the Army
+    title: ATP 3-50.21 Survival (supersedes FM 21-76)
+    licence: Public domain (US Government work)
+    permission: public-domain
+
+  - source_id: fema-ready
+    publisher: US Federal Emergency Management Agency
+    title: Ready.gov hazard and preparedness guidance
+    url: https://www.ready.gov/
+    licence: Public domain (US Government work)
+    permission: public-domain
+
+  - source_id: ndma-india
+    publisher: National Disaster Management Authority, Government of India
+    title: NDMA disaster-specific do's and don'ts
+    url: https://ndma.gov.in/
+    licence: Government of India - verify reuse terms
+    permission: pending
+
+  - source_id: nhtsa-safety
+    publisher: US National Highway Traffic Safety Administration
+    title: NHTSA vehicle and roadside safety resources
+    url: https://www.nhtsa.gov/
+    licence: Public domain (US Government work)
+    permission: public-domain
+
+  - source_id: zs-emergency-numbers
+    publisher: ZeroSignal editorial team
+    title: Emergency number directory (compiled from national government sources)
+    licence: CC BY 4.0
+    permission: original
+    notes: Numbers must be re-verified against official sources before each release.

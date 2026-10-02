@@ -1,0 +1,76 @@
+- table_id: supply-needs
+  kind: supply_needs
+  title: Daily needs per person
+  source_id: fema-ready
+  data:
+    water_l_per_person_day: 4
+    water_note: About 4 litres per person per day for drinking and basic hygiene (Ready.gov guidance is about 1 gallon, 3.8 L). Increase in hot weather, for nursing mothers, and for the ill.
+    multipliers: {hot_climate: 1.5, child: 0.75, infant: 0.5, elderly: 1.0, pregnant: 1.25}
+    food_kcal_per_person_day: 2000
+    food_note: Plan roughly 2,000 kcal per adult per day; children need less, active adults more.
+    recommended_days: 3
+    recommended_days_note: Keep at least 3 days of supplies; 2 weeks at home where possible.
+
+- table_id: kit-checklists
+  kind: kit_checklists
+  title: Recommended kit checklists
+  source_id: fema-ready
+  data:
+    home:
+      - Water (4 L per person per day, 3+ days)
+      - Non-perishable food (3+ days)
+      - Torch and spare batteries
+      - Power bank, charged
+      - Battery or hand-crank radio
+      - First-aid kit
+      - Prescription medicines (7+ days) and a written list
+      - Copies of ID and documents in a waterproof bag
+      - Cash in small notes
+      - Whistle
+      - Dust masks
+      - Soap, sanitiser, sanitary items
+      - Blankets or sleeping bags
+      - Manual can opener
+    car:
+      - Spare tyre, jack and wheel brace (checked)
+      - Warning triangle and reflective vest
+      - Jumper cables
+      - Tow strap
+      - Torch
+      - First-aid kit
+      - Water and snacks
+      - Phone charger cable
+      - Blanket
+      - Fire extinguisher
+      - Tyre inflator or puncture kit
+      - Window breaker / seatbelt cutter
+    trek:
+      - Map and compass
+      - Headlamp and spare batteries
+      - Whistle
+      - Emergency bivvy / space blanket
+      - Water purification (tablets or filter)
+      - First-aid kit incl. blister care
+      - Warm layer, rain shell, hat and gloves
+      - High-energy food
+      - Power bank
+      - Knife or multitool
+      - Fire starter
+      - Sun protection
+      - Trip card left with someone
+    first_aid:
+      - Disposable gloves
+      - Sterile gauze and dressings (assorted)
+      - Crepe / elastic bandages
+      - Triangular bandage (sling)
+      - Adhesive plasters
+      - Medical tape
+      - Tourniquet (commercial, windlass type)
+      - Trauma shears
+      - Tweezers
+      - Antiseptic wipes
+      - ORS packets
+      - Thermometer
+      - Cling film (for burns)
+      - CPR face shield
+      - Space blanket
