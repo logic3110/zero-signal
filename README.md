@@ -66,3 +66,9 @@ If the model fails, the pipeline falls back to the extractive answer. The valida
 
 `zs-build --release` fails unless every protocol card and guide has reviewer sign-off, the pack has `reviewer_signoff`, and no source has `permission: pending`.
 **All content is currently original draft text pending expert review**, and the app says so on every guide and card. Emergency numbers must be re-verified before release.
+
+## Deploying to Vercel
+
+One project at the repo root (`vercel.json`): the PWA is served statically from `web/dist`, and the FastAPI app runs as a Python function (`api/index.py`) behind `/api/*` and `/packs/*.sqlite`.
+`scripts/vercel-build.sh` builds the packs and then the PWA. It runs on the Hobby (free) tier.
+Set the `ZS_*` variables (and `ANTHROPIC_API_KEY` if you use it) under Project → Settings → Environment Variables, because `backend/.env` is not deployed. Without them, `/api/ask` uses the extractive backend.
