@@ -102,6 +102,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
 
     def st(request: Request) -> State:
+        # Serverless hosts (Vercel) may not run the lifespan, so load on first use.
+        if not hasattr(request.app.state, "zs"):
+            request.app.state.zs = State(settings)
         return request.app.state.zs
 
     # ------------------------------------------------------------- health

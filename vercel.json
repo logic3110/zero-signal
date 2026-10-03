@@ -1,0 +1,19 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "cd web && npm ci",
+  "buildCommand": "bash scripts/vercel-build.sh",
+  "outputDirectory": "web/dist",
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "backend/{zerosignal,content,dist}/**",
+      "excludeFiles": "{web/**,backend/tests/**,backend/.venv/**,.vercel-build-venv/**}",
+      "maxDuration": 60
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index" },
+    { "source": "/packs/(.*\\.(?:sqlite|sig))", "destination": "/api/index" },
+    { "source": "/((?!api/|packs/|assets/).*)", "destination": "/index.html" }
+  ]
+}

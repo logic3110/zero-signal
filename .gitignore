@@ -17,3 +17,8 @@ web/public/packs/
 
 # Secrets
 backend/.env
+
+# Vercel
+.vercel
+.vercel-build-venv/
+backend/build/
