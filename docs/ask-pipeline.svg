@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="990" viewBox="0 0 1000 990" role="img" aria-label="A question passes the red-flag detector, query planning, parallel BM25 and vector search, rank fusion, confidence scoring, domain routing and a confidence gate before context is built, the LLM streams, and a citation validator checks the answer. Each stage emits a server-sent event; off-topic and low-confidence questions stop before the LLM.">
+        <style>svg{--bg:#f5f6f4;--plate:#ffffff;--ink:#1d2422;--muted:#5d6965;--line:#c9d0cc;--accent:#b86a00;--accent-fill:#fff3df;--alarm:#c2362b;--alarm-fill:#fde9e6;}
+@media (prefers-color-scheme: dark){svg{--bg:#121614;--plate:#1a201e;--ink:#e4e9e6;--muted:#98a59f;--line:#3a4541;--accent:#f0a640;--accent-fill:#33270f;--alarm:#ff7a6b;--alarm-fill:#3a1d1a;}}
+text{fill:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+.bg{fill:var(--plate)}
+.box{fill:var(--plate);stroke:var(--ink);stroke-width:1.25}
+.group{fill:none;stroke:var(--line);stroke-width:1.5;stroke-dasharray:5 4}
+.out{fill:var(--bg);stroke:var(--ink);stroke-width:1.25}
+.acc{fill:var(--accent-fill);stroke:var(--accent);stroke-width:2}
+.alarm{fill:var(--alarm-fill);stroke:var(--alarm);stroke-width:2}
+.ev{fill:var(--bg);stroke:var(--line);stroke-width:1.25}
+.ev.stop{stroke:var(--ink);stroke-dasharray:3 3}
+.t{font-weight:600;font-size:13px}
+.s{font-size:11px;fill:var(--muted)}
+.m{font:600 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.band{font:600 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.1em;fill:var(--muted)}
+.lbl{font:400 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;fill:var(--muted)}
+.wire{fill:none;stroke:var(--ink);stroke-width:1.25}
+.wire.loop{stroke-dasharray:4 3}
+.head{fill:var(--ink)}</style>
+<rect class="bg" width="1000" height="990"/>
+<defs>
+          <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker>
+        </defs>
+
+        <text x="170" y="20" class="band">rag/pipeline.py · AskPipeline.run</text>
+        <text x="620" y="20" class="band">SSE EVENT TO CLIENT</text>
+
+        <!-- legend -->
+        <rect x="800" y="8" width="22" height="14" rx="3" class="ev stop"/>
+        <text x="828" y="19" class="lbl">ends the stream</text>
+
+        <!-- 0 question -->
+        <rect x="170" y="36" width="330" height="44" rx="22" class="box"/>
+        <text x="335" y="56" class="t" text-anchor="middle">Question</text>
+        <text x="335" y="71" class="s" text-anchor="middle">follow-ups fold in the previous question</text>
+        <path d="M335,80 V110" class="wire" marker-end="url(#a2)"/>
+
+        <!-- 1 red flag -->
+        <rect x="170" y="110" width="330" height="56" rx="4" class="alarm"/>
+        <text x="182" y="132" class="t">1 · Red-flag detector</text>
+        <text x="182" y="150" class="s">37 protocol cards, phrase match in English and Hindi</text>
+        <path d="M335,166 V196" class="wire" marker-end="url(#a2)"/>
+        <path d="M500,138 H620" class="wire" marker-end="url(#a2)"/>
+        <text x="560" y="131" class="lbl" text-anchor="middle">on match</text>
+        <rect x="620" y="118" width="340" height="40" rx="4" class="ev"/>
+        <text x="632" y="135" class="m">redflag</text>
+        <text x="632" y="150" class="s">emergency cards shown before any search result</text>
+
+        <!-- 2 query plan -->
+        <rect x="170" y="196" width="330" height="56" rx="4" class="box"/>
+        <text x="182" y="218" class="t">2 · Query plan</text>
+        <text x="182" y="236" class="s">synonyms · typo fix (≤ 2 edits) · prefix match</text>
+
+        <!-- 3 split -->
+        <path d="M335,252 V267 H247 V282" class="wire" marker-end="url(#a2)"/>
+        <path d="M335,267 H422 V282" class="wire" marker-end="url(#a2)"/>
+        <rect x="170" y="282" width="155" height="56" rx="4" class="box"/>
+        <text x="182" y="304" class="t">3a · BM25</text>
+        <text x="182" y="322" class="s">SQLite FTS5, top 40</text>
+        <rect x="345" y="282" width="155" height="56" rx="4" class="box"/>
+        <text x="357" y="304" class="t">3b · Vector</text>
+        <text x="357" y="322" class="s">cosine in Python, top 40</text>
+        <path d="M247,338 V353 H335 V368" class="wire" marker-end="url(#a2)"/>
+        <path d="M422,338 V353 H335" class="wire"/>
+        <text x="510" y="314" class="lbl">filtered by domain</text>
+        <text x="510" y="328" class="lbl">and patient type</text>
+
+        <!-- 4 RRF -->
+        <rect x="170" y="368" width="330" height="56" rx="4" class="box"/>
+        <text x="182" y="390" class="t">4 · Reciprocal rank fusion</text>
+        <text x="182" y="408" class="s">Σ 1/(60 + rank) · term coverage breaks ties · top 8</text>
+        <path d="M335,424 V454" class="wire" marker-end="url(#a2)"/>
+
+        <!-- 5 confidence -->
+        <rect x="170" y="454" width="330" height="56" rx="4" class="box"/>
+        <text x="182" y="476" class="t">5 · Confidence</text>
+        <text x="182" y="494" class="s">0.65 × coverage + 0.35 × cosine, best of top 3</text>
+        <path d="M335,510 V540" class="wire" marker-end="url(#a2)"/>
+        <!-- loop A -->
+        <path d="M170,482 H140 V224 H170" class="wire loop" marker-end="url(#a2)"/>
+        <text x="128" y="326" class="lbl" text-anchor="end">red flag fired</text>
+        <text x="128" y="340" class="lbl" text-anchor="end">and conf &lt; 0.4:</text>
+        <text x="128" y="354" class="lbl" text-anchor="end">search again with</text>
+        <text x="128" y="368" class="lbl" text-anchor="end">card title added</text>
+
+        <!-- 6 router -->
+        <rect x="170" y="540" width="330" height="56" rx="4" class="box"/>
+        <text x="182" y="562" class="t">6 · Domain router</text>
+        <text x="182" y="580" class="s">lexicon vote, +1.5 for the retrieved domain</text>
+        <path d="M335,596 V626" class="wire" marker-end="url(#a2)"/>
+        <path d="M500,568 H620" class="wire" marker-end="url(#a2)"/>
+        <text x="560" y="561" class="lbl" text-anchor="middle">off-topic</text>
+        <rect x="620" y="548" width="340" height="40" rx="4" class="ev stop"/>
+        <text x="632" y="565" class="m">declined</text>
+        <text x="632" y="580" class="s">coding, politics, recipes… only if no red flag</text>
+
+        <!-- 7 gate -->
+        <rect x="170" y="626" width="330" height="56" rx="4" class="box"/>
+        <text x="182" y="648" class="t">7 · Confidence gate</text>
+        <text x="182" y="666" class="s">continue only if confidence ≥ 0.4</text>
+        <path d="M335,682 V712" class="wire" marker-end="url(#a2)"/>
+        <path d="M500,654 H620" class="wire" marker-end="url(#a2)"/>
+        <text x="560" y="647" class="lbl" text-anchor="middle">&lt; 0.4</text>
+        <rect x="620" y="634" width="340" height="40" rx="4" class="ev stop"/>
+        <text x="632" y="651" class="m">not_in_library</text>
+        <text x="632" y="666" class="s">3 closest guides · the LLM is never called</text>
+
+        <!-- 8 context -->
+        <rect x="170" y="712" width="330" height="56" rx="4" class="box"/>
+        <text x="182" y="734" class="t">8 · Context builder</text>
+        <text x="182" y="752" class="s">top 6 + guide's Steps, Warnings, Help · ≤ 2400 tok</text>
+        <path d="M335,768 V798" class="wire" marker-end="url(#a2)"/>
+        <path d="M500,740 H620" class="wire" marker-end="url(#a2)"/>
+        <text x="560" y="733" class="lbl" text-anchor="middle">numbered</text>
+        <rect x="620" y="720" width="340" height="40" rx="4" class="ev"/>
+        <text x="632" y="737" class="m">context</text>
+        <text x="632" y="752" class="s">sources sent first, so they survive a Stop</text>
+
+        <!-- 9 LLM -->
+        <rect x="170" y="798" width="330" height="56" rx="4" class="acc"/>
+        <text x="182" y="820" class="t">9 · Prompt → LLM stream</text>
+        <text x="182" y="838" class="s">≤ 350 tokens, cites passages as [n]</text>
+        <path d="M335,854 V884" class="wire" marker-end="url(#a2)"/>
+        <path d="M500,826 H620" class="wire" marker-end="url(#a2)"/>
+        <text x="560" y="819" class="lbl" text-anchor="middle">streams</text>
+        <rect x="620" y="806" width="340" height="40" rx="4" class="ev"/>
+        <text x="632" y="823" class="m">token · error</text>
+        <text x="632" y="838" class="s">answer text as it arrives</text>
+
+        <!-- 10 validator -->
+        <rect x="170" y="884" width="330" height="56" rx="4" class="box"/>
+        <text x="182" y="906" class="t">10 · Citation validator</text>
+        <text x="182" y="924" class="s">drop unknown [n] · drop doses not in the cited source</text>
+        <path d="M500,912 H620" class="wire" marker-end="url(#a2)"/>
+        <text x="560" y="905" class="lbl" text-anchor="middle">validated</text>
+        <rect x="620" y="892" width="340" height="40" rx="4" class="ev stop"/>
+        <text x="632" y="909" class="m">answer · done</text>
+        <text x="632" y="924" class="s">structured, cited lines · timings</text>
+        <!-- loop B -->
+        <path d="M170,912 H140 V826 H170" class="wire loop" marker-end="url(#a2)"/>
+        <text x="128" y="862" class="lbl" text-anchor="end">error or empty:</text>
+        <text x="128" y="876" class="lbl" text-anchor="end">rerun extractive</text>
+      </svg>
