@@ -5,6 +5,14 @@
 This repo holds the **backend** (content pipeline, pack format, RAG engine, API) and the **web app** (an offline-first PWA).
 The Android app from `zerosignal-requirements.txt` is out of scope for now; it would reuse the same packs and pipeline.
 
+## Architecture
+
+![Build and runtime: content is chunked, embedded and written into SQLite packs for the API and JSON bundles for the browser](docs/architecture.svg)
+
+Each pack is built twice. The API reads a read-only `pack.sqlite`: keyword search runs inside SQLite (FTS5 `bm25()`), while the int8 vectors are only stored there and are loaded into memory for cosine search in Python. The browser gets a JSON bundle without vectors, keeps it in IndexedDB and searches it offline with MiniSearch, so only Ask needs the network.
+
+![Ask pipeline: red flag, query plan, BM25 and vector search, rank fusion, confidence, router, gate, context, LLM, citation validator](docs/ask-pipeline.svg)
+
 ```
 backend/
   zerosignal/          Python package
@@ -19,7 +27,7 @@ backend/
                        prompt, LLM backends, citation validator, pipeline
     api/app.py         FastAPI: catalog, pack files (Range), library, search, protocols, /api/ask (SSE)
   content/
-    guides/{medical,survival,vehicle}/*.md   78 guides (Markdown + YAML front matter)
+    guides/{medical,survival,vehicle}/*.md   80 guides (Markdown + YAML front matter)
     protocol_cards/*.yaml                    37 emergency cards (all PRD MVP cards)
     trees/*.yaml                             decision trees (won't start, smoke, vibration, START triage)
     tables/*.yaml                            emergency numbers, warning lights, OBD codes, water, supplies

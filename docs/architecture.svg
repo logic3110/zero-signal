@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="575" viewBox="0 0 1040 575" role="img" aria-label="Content is chunked, embedded and written into SQLite packs for the API and JSON bundles for the browser. The browser searches offline; only Ask calls the Vercel Python function, which streams events back.">
+        <style>svg{--bg:#f5f6f4;--plate:#ffffff;--ink:#1d2422;--muted:#5d6965;--line:#c9d0cc;--accent:#b86a00;--accent-fill:#fff3df;--alarm:#c2362b;--alarm-fill:#fde9e6;}
+@media (prefers-color-scheme: dark){svg{--bg:#121614;--plate:#1a201e;--ink:#e4e9e6;--muted:#98a59f;--line:#3a4541;--accent:#f0a640;--accent-fill:#33270f;--alarm:#ff7a6b;--alarm-fill:#3a1d1a;}}
+text{fill:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+.bg{fill:var(--plate)}
+.box{fill:var(--plate);stroke:var(--ink);stroke-width:1.25}
+.group{fill:none;stroke:var(--line);stroke-width:1.5;stroke-dasharray:5 4}
+.out{fill:var(--bg);stroke:var(--ink);stroke-width:1.25}
+.acc{fill:var(--accent-fill);stroke:var(--accent);stroke-width:2}
+.alarm{fill:var(--alarm-fill);stroke:var(--alarm);stroke-width:2}
+.ev{fill:var(--bg);stroke:var(--line);stroke-width:1.25}
+.ev.stop{stroke:var(--ink);stroke-dasharray:3 3}
+.t{font-weight:600;font-size:13px}
+.s{font-size:11px;fill:var(--muted)}
+.m{font:600 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.band{font:600 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.1em;fill:var(--muted)}
+.lbl{font:400 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;fill:var(--muted)}
+.wire{fill:none;stroke:var(--ink);stroke-width:1.25}
+.wire.loop{stroke-dasharray:4 3}
+.head{fill:var(--ink)}</style>
+<rect class="bg" width="1040" height="575"/>
+<defs>
+          <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker>
+        </defs>
+
+        <text x="20" y="24" class="band">BUILD · zs-build → zs-sign → zs-publish (scripts/vercel-build.sh)</text>
+
+        <rect x="20" y="40" width="170" height="72" rx="4" class="box"/>
+        <text x="32" y="62" class="t">Content</text>
+        <text x="32" y="80" class="s">80 Markdown guides</text>
+        <text x="32" y="95" class="s">37 cards, trees, synonyms</text>
+
+        <rect x="225" y="40" width="170" height="72" rx="4" class="box"/>
+        <text x="237" y="62" class="t">Ingest + chunk</text>
+        <text x="237" y="80" class="s">split by guide section</text>
+        <text x="237" y="95" class="s">~380 tokens, 12% overlap</text>
+
+        <rect x="430" y="40" width="170" height="72" rx="4" class="box"/>
+        <text x="442" y="62" class="t">Embed</text>
+        <text x="442" y="80" class="s">zs-hash-v1, 384-d</text>
+        <text x="442" y="95" class="s">quantised to int8</text>
+
+        <rect x="635" y="40" width="170" height="72" rx="4" class="box"/>
+        <text x="647" y="62" class="t">Pack writer</text>
+        <text x="647" y="80" class="s">one pack per config:</text>
+        <text x="647" y="95" class="s">core + 3 domain packs</text>
+
+        <rect x="840" y="40" width="180" height="72" rx="4" class="out"/>
+        <text x="852" y="62" class="t">pack.sqlite + .sig</text>
+        <text x="852" y="80" class="s">chunks · FTS5 · vectors</text>
+        <text x="852" y="95" class="s">Ed25519 signature</text>
+
+        <rect x="635" y="150" width="170" height="72" rx="4" class="out"/>
+        <text x="647" y="172" class="t">pack.json bundle</text>
+        <text x="647" y="190" class="s">no vectors · SHA-256 listed</text>
+        <text x="647" y="205" class="s">in catalog.json</text>
+
+        <path d="M190,76 H225" class="wire" marker-end="url(#a1)"/>
+        <path d="M395,76 H430" class="wire" marker-end="url(#a1)"/>
+        <path d="M600,76 H635" class="wire" marker-end="url(#a1)"/>
+        <path d="M805,76 H840" class="wire" marker-end="url(#a1)"/>
+        <path d="M720,112 V150" class="wire" marker-end="url(#a1)"/>
+
+        <!-- build outputs into runtime -->
+        <path d="M635,186 H345 V315" class="wire" marker-end="url(#a1)"/>
+        <text x="490" y="179" class="lbl" text-anchor="middle">web/public/packs</text>
+        <path d="M905,112 V315" class="wire" marker-end="url(#a1)"/>
+        <text x="913" y="200" class="lbl">backend/dist</text>
+        <text x="913" y="214" class="lbl">opened at cold start</text>
+
+        <text x="20" y="262" class="band">RUNTIME · VERCEL</text>
+
+        <!-- browser -->
+        <rect x="20" y="275" width="440" height="285" rx="6" class="group"/>
+        <text x="40" y="299" class="t">Browser · React PWA (static web/dist)</text>
+
+        <rect x="40" y="315" width="190" height="56" rx="4" class="box"/>
+        <text x="52" y="337" class="t">Service worker</text>
+        <text x="52" y="355" class="s">precaches app + core packs</text>
+
+        <rect x="250" y="315" width="190" height="56" rx="4" class="box"/>
+        <text x="262" y="337" class="t">IndexedDB packs</text>
+        <text x="262" y="355" class="s">SHA-256 checked updates</text>
+
+        <rect x="40" y="395" width="190" height="56" rx="4" class="box"/>
+        <text x="52" y="417" class="t">MiniSearch</text>
+        <text x="52" y="435" class="s">offline fuzzy BM25</text>
+
+        <rect x="250" y="395" width="190" height="56" rx="4" class="box"/>
+        <text x="262" y="417" class="t">Ask page</text>
+        <text x="262" y="435" class="s">the only part needing network</text>
+
+        <rect x="40" y="475" width="400" height="56" rx="4" class="box"/>
+        <text x="52" y="497" class="t">Library, protocol cards, decision trees, tools</text>
+        <text x="52" y="515" class="s">CPR metronome, SOS, compass, warning lights · all offline</text>
+
+        <!-- function -->
+        <rect x="580" y="275" width="440" height="285" rx="6" class="group"/>
+        <text x="600" y="299" class="t">Python function · api/index.py → FastAPI</text>
+
+        <rect x="600" y="315" width="190" height="56" rx="4" class="box"/>
+        <text x="612" y="337" class="t">HybridSearcher</text>
+        <text x="612" y="355" class="s">FTS5 BM25 + vectors, RRF</text>
+
+        <rect x="810" y="315" width="190" height="56" rx="4" class="box"/>
+        <text x="822" y="337" class="t">PackReader</text>
+        <text x="822" y="355" class="s">one per .sqlite pack</text>
+
+        <rect x="600" y="395" width="400" height="56" rx="4" class="box"/>
+        <text x="612" y="417" class="t">AskPipeline</text>
+        <text x="612" y="435" class="s">red flag → retrieve → route → gate → LLM → validate (fig. 2)</text>
+
+        <rect x="600" y="475" width="400" height="56" rx="4" class="acc"/>
+        <text x="612" y="497" class="t">LLM backend · ZS_LLM_BACKEND</text>
+        <text x="612" y="515" class="s">extractive (default) · local OpenAI-compatible · Anthropic</text>
+
+        <path d="M810,343 H790" class="wire" marker-end="url(#a1)"/>
+        <path d="M695,371 V395" class="wire" marker-end="url(#a1)"/>
+        <path d="M800,451 V475" class="wire" marker-end="url(#a1)"/>
+
+        <path d="M440,413 H600" class="wire" marker-end="url(#a1)"/>
+        <text x="520" y="406" class="lbl" text-anchor="middle">POST /api/ask</text>
+        <path d="M600,437 H440" class="wire" marker-end="url(#a1)"/>
+        <text x="520" y="454" class="lbl" text-anchor="middle">SSE events</text>
+      </svg>
