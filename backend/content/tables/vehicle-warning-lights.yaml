@@ -1,0 +1,237 @@
+# Warning lights and generic OBD-II codes (US-9.3, US-9.4). Descriptions are
+# ZeroSignal's own wording, not copied SAE J2012 text.
+- table_id: warning-lights
+  kind: warning_lights
+  title: Dashboard warning lights
+  source_id: zs-original
+  data:
+  - id: oil
+    name: Oil pressure
+    symbol: oil-can
+    color: red
+    severity: stop
+    meaning: Engine oil pressure is too low.
+    action: Stop the engine as soon as safe. Check oil level after a few minutes. Do not drive until fixed.
+    guide_id: veh-warning-lights
+  - id: temp
+    name: Engine temperature
+    symbol: thermometer
+    color: red
+    severity: stop
+    meaning: Engine is overheating.
+    action: AC off, heater on max, pull over and switch off. Do not open the radiator cap hot.
+    guide_id: veh-overheating
+  - id: battery
+    name: Battery / charging
+    symbol: battery
+    color: red
+    severity: careful
+    meaning: The alternator is not charging the battery.
+    action: Switch off non-essential electrics and drive directly to help; the car may stop.
+    guide_id: veh-dead-battery
+  - id: brake
+    name: Brake system
+    symbol: circle-exclamation
+    color: red
+    severity: stop
+    meaning: Handbrake on or low brake fluid / brake fault.
+    action: Check handbrake. If still on, stop and get help.
+    guide_id: veh-brakes
+  - id: airbag
+    name: Airbag / SRS
+    symbol: seated-person-airbag
+    color: red
+    severity: check-soon
+    meaning: Airbag system fault; airbags may not deploy.
+    action: Drive carefully and get it checked soon.
+  - id: seatbelt
+    name: Seatbelt reminder
+    symbol: seatbelt
+    color: red
+    severity: info
+    meaning: A seatbelt is not fastened.
+    action: Fasten all seatbelts.
+  - id: engine
+    name: Check engine (MIL)
+    symbol: engine
+    color: amber
+    severity: check-soon
+    meaning: Engine management fault detected. Flashing means a serious misfire.
+    action: 'Steady: drive gently, get checked soon. Flashing: reduce speed, stop driving soon.'
+    guide_id: veh-warning-lights
+  - id: abs
+    name: ABS
+    symbol: abs-circle
+    color: amber
+    severity: careful
+    meaning: Anti-lock braking fault. Normal brakes still work.
+    action: Drive carefully with more stopping distance; get it checked.
+  - id: tpms
+    name: Tyre pressure
+    symbol: tyre-exclamation
+    color: amber
+    severity: careful
+    meaning: One or more tyres is under-inflated.
+    action: Check and inflate all tyres at the next safe stop; inspect for punctures.
+    guide_id: veh-flat-tyre
+  - id: traction
+    name: Traction / stability control
+    symbol: car-skid
+    color: amber
+    severity: careful
+    meaning: 'Flashing: system working on a slippery surface. Steady: system off or faulty.'
+    action: Drive gently; get it checked if it stays on.
+  - id: glow
+    name: Diesel glow plug
+    symbol: coil
+    color: amber
+    severity: info
+    meaning: Glow plugs are warming (diesel). Flashing while driving means a fault.
+    action: Wait for it to go out before starting. If flashing, get checked.
+  - id: dpf
+    name: Diesel particulate filter
+    symbol: filter-dots
+    color: amber
+    severity: check-soon
+    meaning: DPF is clogged.
+    action: Drive at steady higher speed for 15-20 minutes if safe, or get it checked.
+  - id: power-steering
+    name: Power steering
+    symbol: steering-wheel-exclamation
+    color: amber
+    severity: careful
+    meaning: Power steering fault; steering may be heavy.
+    action: Drive slowly and carefully to a mechanic.
+  - id: fuel
+    name: Low fuel
+    symbol: fuel-pump
+    color: amber
+    severity: info
+    meaning: Fuel is low.
+    action: Refuel soon.
+  - id: washer
+    name: Washer fluid low
+    symbol: windscreen-spray
+    color: amber
+    severity: info
+    meaning: Washer fluid is low.
+    action: Top up when convenient.
+  - id: ev-power
+    name: EV reduced power / turtle
+    symbol: turtle
+    color: amber
+    severity: careful
+    meaning: Battery low or system fault; power limited.
+    action: Drive to a safe place or charger; see the EV safety guide.
+    guide_id: veh-ev-hybrid
+  - id: headlight
+    name: Main beam on
+    symbol: headlamp
+    color: blue
+    severity: info
+    meaning: High beam is on.
+    action: Dip headlights for oncoming traffic.
+  - id: cruise
+    name: Cruise control
+    symbol: speedometer
+    color: green
+    severity: info
+    meaning: Cruise control is active.
+    action: No action needed.
+- table_id: obd-codes
+  kind: obd_codes
+  title: Generic OBD-II codes (common)
+  source_id: zs-original
+  data:
+  - code: P0101
+    meaning: Mass air flow sensor range/performance
+    causes: Dirty MAF sensor, air leak, clogged air filter
+    safe_to_drive: caution
+  - code: P0113
+    meaning: Intake air temperature sensor high input
+    causes: Unplugged or faulty IAT sensor, wiring
+    safe_to_drive: 'yes'
+  - code: P0118
+    meaning: Engine coolant temperature sensor high input
+    causes: Faulty ECT sensor or wiring
+    safe_to_drive: caution
+  - code: P0128
+    meaning: Coolant temperature below thermostat regulating temperature
+    causes: Thermostat stuck open, sensor fault
+    safe_to_drive: 'yes'
+  - code: P0171
+    meaning: System too lean (bank 1)
+    causes: Vacuum leak, dirty MAF, weak fuel pump, clogged injector
+    safe_to_drive: caution
+  - code: P0172
+    meaning: System too rich (bank 1)
+    causes: Leaking injector, faulty O2 sensor, high fuel pressure
+    safe_to_drive: caution
+  - code: P0217
+    meaning: Engine overtemperature condition
+    causes: Low coolant, failed fan, thermostat, water pump
+    safe_to_drive: 'no'
+  - code: P0300
+    meaning: Random/multiple cylinder misfire detected
+    causes: Spark plugs, coils, vacuum leak, low fuel pressure
+    safe_to_drive: caution
+  - code: P0301
+    meaning: Cylinder 1 misfire detected
+    causes: Spark plug, ignition coil, injector on cylinder 1
+    safe_to_drive: caution
+  - code: P0335
+    meaning: Crankshaft position sensor circuit
+    causes: Faulty sensor, wiring, reluctor ring
+    safe_to_drive: caution
+  - code: P0340
+    meaning: Camshaft position sensor circuit
+    causes: Faulty sensor, wiring, timing issue
+    safe_to_drive: caution
+  - code: P0401
+    meaning: EGR flow insufficient
+    causes: Clogged EGR valve or passages
+    safe_to_drive: 'yes'
+  - code: P0420
+    meaning: Catalyst efficiency below threshold (bank 1)
+    causes: Worn catalytic converter, O2 sensor, exhaust leak
+    safe_to_drive: 'yes'
+  - code: P0442
+    meaning: Evaporative emission system small leak
+    causes: Loose fuel cap, cracked EVAP hose
+    safe_to_drive: 'yes'
+  - code: P0455
+    meaning: Evaporative emission system large leak
+    causes: Missing fuel cap, disconnected EVAP hose
+    safe_to_drive: 'yes'
+  - code: P0500
+    meaning: Vehicle speed sensor malfunction
+    causes: Faulty speed sensor or wiring
+    safe_to_drive: caution
+  - code: P0521
+    meaning: Engine oil pressure sensor range/performance
+    causes: Low oil level, faulty sensor, worn oil pump
+    safe_to_drive: caution
+  - code: P0562
+    meaning: System voltage low
+    causes: Weak battery, failing alternator, poor connections
+    safe_to_drive: caution
+  - code: P0700
+    meaning: Transmission control system malfunction
+    causes: Transmission fault stored in TCM - read TCM codes
+    safe_to_drive: caution
+  - code: P2135
+    meaning: Throttle position sensor correlation
+    causes: Faulty throttle body or pedal sensor, wiring
+    safe_to_drive: 'no'
+  - code: B0001
+    meaning: Driver frontal airbag deployment control
+    causes: Airbag module, clock spring, wiring
+    safe_to_drive: caution
+  - code: C0035
+    meaning: Left front wheel speed sensor circuit
+    causes: Damaged sensor, wiring, dirt on tone ring
+    safe_to_drive: caution
+  - code: U0100
+    meaning: Lost communication with engine control module
+    causes: Wiring, CAN bus fault, ECM power supply
+    safe_to_drive: 'no'

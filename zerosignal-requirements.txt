@@ -1,0 +1,1098 @@
+================================================================================
+                    ZEROSIGNAL - PRODUCT REQUIREMENTS DOCUMENT
+          Offline RAG assistant for Emergency Medicine, Survival and
+                         Vehicle Repair on Android
+================================================================================
+Version      : 1.0 (draft)
+Date         : 2026-09-30
+Status       : For build-from-scratch planning
+Codename     : ZeroSignal  (NOTE: "NoSignal" is an existing product at
+               nosignal.app - choose a distinct public name before launch)
+
+--------------------------------------------------------------------------------
+TABLE OF CONTENTS
+--------------------------------------------------------------------------------
+ 1. Product overview
+ 2. Goals and non-goals
+ 3. User personas
+ 4. Priority legend and ID scheme
+ 5. Epics, user stories and acceptance criteria
+    E1  Onboarding and installation
+    E2  Offline knowledge library
+    E3  Search (keyword + semantic)
+    E4  Ask - offline RAG answers
+    E5  Emergency protocol cards (red-flag fast path)
+    E6  Plan-this-situation
+    E7  Emergency medicine domain
+    E8  Survival domain
+    E9  Vehicle repair domain
+    E10 Field tools (non-AI)
+    E11 Supplies tracker
+    E12 Model and pack management
+    E13 Voice and multilingual
+    E14 Settings, privacy and accessibility
+    E15 Content build pipeline (developer / curator)
+    E16 Content review and governance
+    E17 Evaluation and quality assurance
+    E18 Distribution and monetisation
+ 6. Non-functional requirements
+ 7. Technical architecture and stack
+ 8. On-device model requirements
+ 9. Knowledge sources and licensing
+10. Safety, legal and disclaimers
+11. Data model
+12. Milestones / release plan
+13. Open questions and risks
+14. Glossary
+
+================================================================================
+1. PRODUCT OVERVIEW
+================================================================================
+ZeroSignal is an Android app that gives expert-grade, cited, step-by-step
+guidance for emergency medicine, wilderness/disaster survival and roadside
+vehicle repair with NO internet connection.
+
+It combines:
+  a) A curated, source-cited offline library (usable without AI).
+  b) Hybrid offline search (SQLite FTS5 keyword + vector semantic search).
+  c) An on-device small language model (2B-4B parameters) that ONLY rewrites
+     retrieved library passages into numbered, cited action steps (RAG).
+  d) Instant, human-reviewed emergency protocol cards for life-threatening
+     situations that never depend on the LLM.
+  e) Non-AI field tools: SOS, compass, flashlight, trip card, supplies,
+     OBD-II code lookup.
+
+Core principle: the app must be fully useful without the AI model, and the
+AI must never answer from its own memory - only from the vetted library, with
+citations.
+
+Tagline (working): "No signal. Still an answer."
+
+================================================================================
+2. GOALS AND NON-GOALS
+================================================================================
+GOALS
+  G1  100% of core functionality works in airplane mode after install.
+  G2  Run on an average Android phone (6 GB RAM, Snapdragon 7-series /
+      Dimensity 7000-class, Android 10+).
+  G3  Every AI answer is grounded in and cites library sources.
+  G4  Life-threatening situations get a correct protocol on screen in < 1 s.
+  G5  Answers in three expert domains: emergency medicine, survival,
+      vehicle repair.
+  G6  No accounts, no analytics, no data leaves the device.
+  G7  Multilingual (English first, then Hindi and other regional languages).
+
+NON-GOALS
+  NG1 Not a medical device, not a diagnosis tool, not a replacement for a
+      clinician, emergency services or a certified mechanic.
+  NG2 Not live GPS turn-by-turn navigation or live maps.
+  NG3 Not a general-purpose chatbot; out-of-domain questions are declined.
+  NG4 No cloud inference, no cloud sync of personal data (v1).
+  NG5 No iOS in v1 (architecture should not block a later port).
+
+================================================================================
+3. USER PERSONAS
+================================================================================
+P1  "Trekker Tara" - hiker/trekker in Himalaya/Western Ghats. Often no signal
+    for days. Needs first aid, navigation fallback, weather/altitude advice.
+P2  "Driver Dev" - long-distance driver/biker on highways and ghats. Needs
+    roadside fixes, warning-light meanings, accident first aid.
+P3  "Household Heena" - parent preparing for floods, cyclones, heatwaves,
+    power cuts. Needs plans, supply tracking, child/elderly first aid.
+P4  "Volunteer Vikram" - community first responder / NGO / ASHA worker in
+    low-connectivity areas. Needs fast triage protocols, dosage-safe info,
+    regional language.
+P5  "Curator Chris" - internal content curator / developer who builds and
+    reviews knowledge packs.
+P6  "Reviewer Dr. Rao / Mechanic Mani" - domain expert who signs off content
+    and evaluates AI answers.
+
+================================================================================
+4. PRIORITY LEGEND AND ID SCHEME
+================================================================================
+Priority:
+  [MVP] Must ship in first public release
+  [P1]  Next release after MVP
+  [P2]  Later / nice to have
+
+Story ID format : US-<epic>.<n>      e.g. US-4.3
+Acceptance crit.: AC lines under each story (Given / When / Then style where
+                  useful)
+
+================================================================================
+5. EPICS, USER STORIES AND ACCEPTANCE CRITERIA
+================================================================================
+
+--------------------------------------------------------------------------------
+E1  ONBOARDING AND INSTALLATION
+--------------------------------------------------------------------------------
+US-1.1 [MVP]
+  As a new user, I want to install the app and immediately use the library
+  and tools without creating an account, so that I can be ready before I lose
+  signal.
+  AC:
+   - No login/sign-up screen exists.
+   - Library, search, protocol cards and field tools work on first launch.
+   - Base APK/AAB (without LLM) <= 150 MB including the core library.
+
+US-1.2 [MVP]
+  As a new user, I want a short onboarding (max 4 screens) that explains what
+  works offline, what the AI can and cannot do, and the medical disclaimer.
+  AC:
+   - Disclaimer must be acknowledged once before first use of Ask.
+   - Onboarding can be skipped and revisited from Settings.
+
+US-1.3 [MVP]
+  As a user, I want the app to detect my phone's RAM/SoC and recommend the
+  right AI pack (Compact or Recommended), so I don't download something that
+  won't run.
+  AC:
+   - Device with < 6 GB RAM: Ask shown as "not supported" OR Compact only
+     with warning.
+   - 6-7 GB: Compact recommended.
+   - >= 8 GB: Recommended pack offered as default.
+
+US-1.4 [MVP]
+  As a user, I want to download the AI model and knowledge packs only over
+  Wi-Fi (with an override), so I don't burn mobile data.
+  AC:
+   - Download is resumable after interruption.
+   - SHA-256 checksum verified after download; corrupt files are re-fetched.
+   - Progress, size and remaining time are shown.
+
+US-1.5 [P1]
+  As a user, I want a "Ready check" screen that confirms everything needed is
+  downloaded and working offline (library, model, tools, emergency contacts).
+  AC:
+   - Runs a local test query through the model and reports pass/fail.
+   - Shows storage used per component.
+
+US-1.6 [P1]
+  As a user, I want a guided "airplane mode test" so I can verify offline
+  behaviour before a trip.
+
+--------------------------------------------------------------------------------
+E2  OFFLINE KNOWLEDGE LIBRARY
+--------------------------------------------------------------------------------
+US-2.1 [MVP]
+  As a user, I want to browse guides by domain (Medical, Survival, Vehicle)
+  and category (e.g. Bleeding, Burns, Water, Fire, Shelter, Engine, Tyres),
+  so I can find information without typing.
+  AC:
+   - Three top-level domains, each with categories and guides.
+   - Guide list loads in < 300 ms offline.
+
+US-2.2 [MVP]
+  As a user, I want each guide to show clear numbered steps, warnings,
+  "when to seek help" and the original source with citation.
+  AC:
+   - Every guide has: title, summary, steps, warnings, red flags, sources,
+     last-reviewed date, reviewer role.
+   - Source list shows publisher, document title, section, licence.
+
+US-2.3 [MVP]
+  As a user, I want to bookmark guides and see recently opened guides.
+  AC:
+   - Bookmarks persist across app restarts; stored locally only.
+
+US-2.4 [MVP]
+  As a user, I want guides to render well in sunlight and at night.
+  AC:
+   - Light ("Sunlight") and dark red-tinted ("Night/Field") themes.
+   - Minimum body text 16sp, scalable with system font size.
+
+US-2.5 [P1]
+  As a user, I want diagrams/illustrations in guides (e.g. recovery position,
+  tourniquet placement, jack points, knots) that work offline.
+  AC:
+   - Images bundled as compressed WebP/SVG; total illustration budget
+     defined per pack.
+
+US-2.6 [P1]
+  As a user, I want to jump from an AI answer citation straight to the exact
+  section of the source guide, highlighted.
+
+US-2.7 [P2]
+  As a user, I want to print/export a guide to PDF for a physical kit.
+
+--------------------------------------------------------------------------------
+E3  SEARCH (KEYWORD + SEMANTIC)
+--------------------------------------------------------------------------------
+US-3.1 [MVP]
+  As a user, I want to type a query and get relevant guide sections instantly
+  even when the AI model is not installed.
+  AC:
+   - Uses SQLite FTS5 (BM25) keyword search.
+   - Results in < 200 ms on a mid-range phone for the full library.
+   - Typo tolerance (prefix + trigram or synonym table).
+
+US-3.2 [MVP]
+  As a user, I want search to understand meaning, not only exact words
+  (e.g. "car won't start clicking noise" -> "weak battery / starter").
+  AC:
+   - Query embedded on-device (EmbeddingGemma-300M or multilingual-e5-small,
+     int8), vector search via sqlite-vec (or ObjectBox HNSW).
+   - Hybrid ranking: BM25 + vector merged with Reciprocal Rank Fusion.
+   - Hybrid search latency < 500 ms p95 on target device.
+
+US-3.3 [MVP]
+  As a user, I want to filter results by domain.
+
+US-3.4 [P1]
+  As a user, I want a synonym/lay-term layer so common words map to
+  technical ones (e.g. "fits" -> seizure, "puncture" -> flat tyre,
+  "check engine light" -> MIL/OBD).
+  AC:
+   - Curated synonym table per language, versioned with the pack.
+
+US-3.5 [P1]
+  As a user, I want recent searches saved locally, with a one-tap clear.
+
+--------------------------------------------------------------------------------
+E4  ASK - OFFLINE RAG ANSWERS
+--------------------------------------------------------------------------------
+US-4.1 [MVP]
+  As a user, I want to ask a question in natural language and get numbered
+  action steps generated on-device from the library.
+  AC:
+   - Works in airplane mode.
+   - Answer format: (1) one-line situation summary, (2) numbered steps,
+     (3) warnings / do-NOTs, (4) when to get professional help,
+     (5) sources.
+   - Time to first token < 4 s (Compact pack, 6 GB phone), streaming output.
+   - Decode speed >= 8 tokens/s on target device.
+
+US-4.2 [MVP]
+  As a user, I want every step in the answer to cite its source passage, so
+  I can trust and verify it.
+  AC:
+   - Each step ends with [n] referencing a retrieved chunk.
+   - Post-generation validator removes/flags steps whose citation id was
+     not in the retrieved context.
+   - Tapping [n] opens the source guide section (US-2.6).
+
+US-4.3 [MVP]
+  As a user, I want the app to say "This isn't covered in the library"
+  instead of guessing when it has no good source.
+  AC:
+   - If top retrieval score < configured threshold, the LLM is NOT called;
+     show "Not in library" + the 3 closest guides.
+   - System prompt forbids answering beyond the provided context.
+
+US-4.4 [MVP]
+  As a user, I want out-of-scope questions (e.g. coding, politics) politely
+  declined.
+  AC:
+   - Domain router classifies query as medical / survival / vehicle / other.
+   - "other" -> polite decline, no generation.
+
+US-4.5 [MVP]
+  As a user, I want to stop generation at any time and still see the sources.
+
+US-4.6 [MVP]
+  As a user, I want the phone not to overheat or die during long use.
+  AC:
+   - Max output tokens capped (default 350).
+   - Model unloaded after N minutes idle; thermal-throttle detection reduces
+     threads.
+   - Battery-saver mode: disables Ask, keeps library/search.
+
+US-4.7 [P1]
+  As a user, I want to ask a follow-up question in the same context
+  ("what if they are a child?").
+  AC:
+   - Keeps last 1-2 turns + re-retrieves using combined query.
+   - Context window budget enforced (e.g. 2,048-4,096 tokens).
+
+US-4.8 [P1]
+  As a user, I want to save or share an answer as text (share works later
+  when signal returns).
+
+US-4.9 [P1]
+  As a user, I want a "More detail" / "Simpler" toggle on an answer.
+
+US-4.10 [P2]
+  As a user, I want to attach a photo (e.g. dashboard warning light, wound,
+  plant) and get relevant library guidance.
+  AC:
+   - Uses multimodal model (Gemma 4 E2B/E4B or Qwen3.5 vision) on-device.
+   - Image is only used to form a query; answer must still cite library.
+   - Clear warning that visual identification may be wrong (esp. plants,
+     mushrooms, snakes).
+
+--------------------------------------------------------------------------------
+E5  EMERGENCY PROTOCOL CARDS (RED-FLAG FAST PATH)
+--------------------------------------------------------------------------------
+US-5.1 [MVP]
+  As a user in a life-threatening situation, I want the correct emergency
+  protocol on screen immediately, without waiting for AI.
+  AC:
+   - Red-flag detector (keyword list + lightweight classifier, multilingual)
+     runs BEFORE retrieval/LLM.
+   - Matching card displayed in < 1 s; LLM answer (if any) appears below.
+   - Cards are static, human-authored, expert-reviewed JSON - never
+     LLM-generated.
+
+US-5.2 [MVP]
+  As a user, I want a big "EMERGENCY" button on the home screen that opens
+  the protocol card grid.
+  AC:
+   - Reachable in 1 tap from home and from a lock-screen widget / quick
+     settings tile [P1].
+   - Minimum MVP cards:
+     MEDICAL : Not breathing / CPR (adult, child, infant), Choking,
+               Severe bleeding / tourniquet, Shock, Anaphylaxis,
+               Heart attack signs, Stroke (FAST), Seizure, Burns,
+               Head/neck/spine injury, Heatstroke, Hypothermia,
+               Drowning, Snakebite, Poisoning, Fractures,
+               Diabetic emergency, Asthma attack.
+     SURVIVAL: Lost (Stop-Mark-Stay-Signal), Flood, Earthquake, Cyclone,
+               Wildfire, Lightning, Landslide, Wild animal encounter.
+     VEHICLE : Vehicle fire, Accident scene safety, Brake failure,
+               Stuck on railway crossing, Vehicle in water,
+               Overheating in traffic/hills, Tyre burst at speed.
+
+US-5.3 [MVP]
+  As a user performing CPR, I want a metronome (100-120 bpm) with voice/
+  vibration cues and a compression/breath counter.
+
+US-5.4 [MVP]
+  As a user, I want each card to show the local emergency number
+  (e.g. 112/108 in India) and a one-tap call button when signal exists.
+  AC:
+   - Country auto-detected from SIM/locale, overridable in Settings.
+
+US-5.5 [P1]
+  As a user, I want timers on cards (tourniquet time, seizure duration, time
+  since snakebite) that log timestamps for handover to medics.
+
+US-5.6 [P1]
+  As a user, I want a handover summary ("patient card") I can show/read to
+  paramedics: what happened, times, actions taken.
+
+--------------------------------------------------------------------------------
+E6  PLAN-THIS-SITUATION
+--------------------------------------------------------------------------------
+US-6.1 [P1]
+  As a household user, I want to describe a situation ("flood warning
+  tomorrow, 2 kids, elderly parent on BP meds") and get a plan split into
+  First 10 minutes / First hour / First day / Next 3 days.
+  AC:
+   - Uses RAG with multi-query retrieval across relevant guides.
+   - Pulls household data from Supplies (E11) if user permits.
+   - Every item cited; output saved as a checklist.
+
+US-6.2 [P1]
+  As a user, I want plan items as tickable checklists that persist.
+
+US-6.3 [P2]
+  As a user, I want pre-built plan templates (power outage, flood, heatwave,
+  earthquake, road trip, multi-day trek) I can personalise without AI.
+
+--------------------------------------------------------------------------------
+E7  EMERGENCY MEDICINE DOMAIN
+--------------------------------------------------------------------------------
+US-7.1 [MVP]
+  As a user, I want first-aid and emergency guidance covering at minimum:
+  airway/breathing/circulation, CPR, bleeding control, shock, wounds and
+  infection, burns, fractures/splinting, sprains, head injury, spinal
+  precautions, chest pain, stroke, seizures, diabetic emergencies, asthma,
+  anaphylaxis, heat illness, cold injury/hypothermia/frostbite, altitude
+  sickness (AMS/HAPE/HACE), drowning, electric shock, poisoning,
+  bites/stings (snake, scorpion, dog/rabies), eye injuries, dental trauma,
+  childbirth emergencies, dehydration/ORS, fever in children, mental health
+  crisis first aid.
+
+US-7.2 [MVP]
+  As a user, I want triage guidance for multiple casualties (e.g. START /
+  simple triage) so I know who to help first.
+
+US-7.3 [MVP]
+  As a user, I want answers to adapt to age group (adult / child / infant /
+  pregnant / elderly) when I mention it or select it.
+  AC:
+   - Patient-type chip selector on Ask screen; passed as retrieval filter
+     and prompt variable.
+
+US-7.4 [P1]
+  As a user, I want safe medication information limited to common OTC and
+  first-aid kit items (e.g. ORS, paracetamol, antihistamine, aspirin in
+  suspected heart attack) with contraindications, strictly from sources.
+  AC:
+   - No dosing generated by the LLM; doses shown only from reviewed static
+     tables with source.
+   - Weight-based dose calculator uses static reviewed formulas only.
+
+US-7.5 [P1]
+  As a user, I want a "vital signs log" (pulse, breathing rate,
+  consciousness AVPU, temperature, time) to track a casualty over time.
+
+US-7.6 [P2]
+  As a community health worker, I want an optional "advanced" pack
+  (e.g. WHO Basic Emergency Care, IMCI protocols) gated behind an
+  "I am trained" toggle.
+
+US-7.7 [P2]
+  As an advanced user with an 8 GB+ phone, I want an optional medical
+  specialist model (e.g. MedGemma 4B quantized) for medical questions.
+  AC:
+   - Still RAG-grounded and cited; benchmarked vs default model before
+     enabling.
+
+--------------------------------------------------------------------------------
+E8  SURVIVAL DOMAIN
+--------------------------------------------------------------------------------
+US-8.1 [MVP]
+  As a user, I want survival guidance covering: priorities (rule of 3s),
+  water finding and purification, fire, shelter, signalling, navigation
+  without GPS (sun, stars, watch method), weather signs, knots, lost-person
+  protocol, food safety, dangerous plants/animals, first-night survival,
+  urban disaster survival.
+
+US-8.2 [MVP]
+  As a household user, I want disaster guidance for floods, cyclones,
+  earthquakes, landslides, heatwaves, wildfires, power outages, water
+  contamination, and evacuation (India/NDMA-aligned + international).
+
+US-8.3 [P1]
+  As a user, I want region-specific packs (e.g. Himalaya trekking, Western
+  Ghats monsoon, desert, coastal) downloadable separately.
+
+US-8.4 [P1]
+  As a user, I want a water purification calculator (boil time by altitude,
+  chlorine/iodine dosage by volume) from sourced tables.
+
+US-8.5 [P2]
+  As a user, I want offline sunrise/sunset and moon-phase times for my
+  last known location (computed, no network).
+
+--------------------------------------------------------------------------------
+E9  VEHICLE REPAIR DOMAIN
+--------------------------------------------------------------------------------
+US-9.1 [MVP]
+  As a driver, I want roadside guidance for: flat/burst tyre change, jump
+  start, dead battery, overheating, fuses, warning lights, brake issues,
+  clutch/gear issues, fuel problems (wrong fuel, empty tank), headlight
+  failure, stuck in mud/sand/snow, towing basics, belt/hose failure, leaks
+  by colour, strange noises/smells diagnosis, two-wheeler specific issues
+  (chain, spark plug, kick start, puncture kit), EV/hybrid safety basics.
+
+US-9.2 [MVP]
+  As a driver, I want a symptom-based troubleshooter ("won't start",
+  "clicking", "smoke", "vibration") that narrows causes step by step.
+  AC:
+   - Deterministic decision trees (JSON) authored and reviewed; the LLM may
+     explain but not replace the tree.
+
+US-9.3 [MVP]
+  As a driver, I want a dashboard warning-light reference with icons,
+  meaning, severity (stop now / drive carefully / check soon).
+
+US-9.4 [P1]
+  As a driver, I want an offline OBD-II code lookup (P0xxx, P2xxx, B, C, U
+  generic codes) with meaning, likely causes and whether it is safe to drive.
+
+US-9.5 [P1]
+  As a driver, I want to save my vehicle profile (make, model, year, fuel
+  type, tyre size, pressure, fuse box location) so answers are tailored.
+  AC:
+   - Stored locally; used as retrieval filter/prompt variable.
+
+US-9.6 [P2]
+  As a driver, I want to connect a Bluetooth ELM327 OBD-II dongle to read
+  live fault codes offline and get cited guidance.
+
+US-9.7 [P2]
+  As a driver, I want to photograph a warning light and have it identified
+  on-device (depends on US-4.10).
+
+--------------------------------------------------------------------------------
+E10 FIELD TOOLS (NON-AI, ALWAYS AVAILABLE)
+--------------------------------------------------------------------------------
+US-10.1 [MVP]  SOS flashlight
+  As a user, I want a flashlight with steady, strobe and Morse SOS modes,
+  plus full-screen white/red/SOS flash for phones without torch access.
+
+US-10.2 [MVP]  SOS message
+  As a user, I want one-tap SMS to my emergency contacts with my GPS
+  coordinates, time and a short message, because SMS works on weak signal.
+  AC:
+   - Uses device GPS (no data needed); includes lat/long in decimal and
+     plus-code; queues and retries until sent.
+   - User confirms before sending (prevent accidental SMS).
+
+US-10.3 [MVP]  Compass
+  As a user, I want a compass with bearing, calibration prompt and a
+  "mark bearing / follow bearing" feature.
+
+US-10.4 [MVP]  My location
+  As a user, I want to see my current and last-known GPS coordinates,
+  altitude and accuracy, readable aloud, without internet.
+
+US-10.5 [MVP]  Emergency contacts & numbers
+  As a user, I want local emergency numbers (police/ambulance/fire/disaster/
+  women's helpline/roadside) by country bundled offline, plus my own
+  emergency contacts.
+
+US-10.6 [P1]  Trip card ("leave a card")
+  As a trekker/driver, I want to create a trip card (route, people, vehicle,
+  start/return time, turn-back time, gear) and share it before leaving;
+  app reminds me at the expected return time.
+
+US-10.7 [P1]  Breadcrumb trail
+  As a trekker, I want to record a GPS breadcrumb track offline and follow
+  it back ("backtrack") with compass guidance.
+
+US-10.8 [P1]  Medical ID
+  As a user, I want a medical ID (blood group, allergies, conditions,
+  medications, emergency contact) accessible from the lock screen.
+
+US-10.9 [P1]  Radio reference and MAYDAY script
+  As a user, I want radio channel references (marine VHF 16, aviation
+  121.5, PMR/FRS, local ham repeaters) and a MAYDAY/PAN-PAN script
+  auto-filled with my position.
+
+US-10.10 [P2] Signal mirror / whistle
+  As a user, I want a whistle (loud audio SOS pattern) and signal-mirror
+  aiming guide.
+
+US-10.11 [P2] Offline map tiles
+  As a trekker, I want optional downloadable offline map tiles (OSM/
+  MapLibre) for a region to see my position.
+
+--------------------------------------------------------------------------------
+E11 SUPPLIES TRACKER
+--------------------------------------------------------------------------------
+US-11.1 [MVP]
+  As a household user, I want to record supplies (water litres, food,
+  medicines, batteries, fuel, cash) and household size.
+
+US-11.2 [MVP]
+  As a household user, I want to see "days remaining" for water, food and
+  each medication, and which runs out first.
+  AC:
+   - Uses standard per-person daily needs (e.g. water 3-4 L/person/day,
+     adjustable for heat/children/elderly), sourced.
+
+US-11.3 [P1]
+  As a user, I want expiry date reminders for medicines, first-aid kit and
+  stored food/water (local notifications).
+
+US-11.4 [P1]
+  As a user, I want recommended kit checklists (home, car, trek, first-aid)
+  and to tick what I have.
+
+--------------------------------------------------------------------------------
+E12 MODEL AND PACK MANAGEMENT
+--------------------------------------------------------------------------------
+US-12.1 [MVP]
+  As a user, I want to choose between AI packs:
+    - Compact    : ~2B model, Q4, ~1.3-1.6 GB   (6 GB RAM phones)
+    - Recommended: ~3-4B model, Q4, ~2-3 GB     (8 GB+ RAM phones)
+  AC:
+   - Shows size, RAM needed, expected speed, languages.
+
+US-12.2 [MVP]
+  As a user, I want to download/update/delete knowledge packs per domain and
+  region independently.
+  AC:
+   - Pack manifest: id, version, language, size, sha256, min_app_version,
+     embedding_model_id, created_at, reviewer sign-off.
+   - Incremental (delta) update when possible; otherwise full replace.
+   - Atomic install: old pack remains usable until the new one is verified.
+
+US-12.3 [MVP]
+  As a user, I want updates to happen only when I choose (never forced
+  mid-emergency).
+
+US-12.4 [P1]
+  As a user, I want to side-load packs/models from SD card or share them
+  phone-to-phone (Wi-Fi Direct / Nearby Share) with no internet.
+  AC:
+   - Signature (ed25519) verified before install.
+
+US-12.5 [P1]
+  As a developer, I want the runtime abstracted so models can be swapped
+  (llama.cpp GGUF, LiteRT-LM, MNN) without app rewrites.
+
+--------------------------------------------------------------------------------
+E13 VOICE AND MULTILINGUAL
+--------------------------------------------------------------------------------
+US-13.1 [P1]
+  As a user whose hands are busy (e.g. doing CPR), I want to ask by voice and
+  have steps read aloud.
+  AC:
+   - Offline STT (whisper.cpp tiny/base or Android on-device recognizer).
+   - Offline TTS (Android TTS engine with downloaded voices).
+   - "Next step" / "repeat" voice commands in protocol cards.
+
+US-13.2 [P1]
+  As a Hindi-speaking user, I want the UI, library and answers in Hindi.
+  AC:
+   - Multilingual embedding model; Hindi library content reviewed by native
+     speakers (not only machine-translated).
+   - Cross-lingual retrieval: Hindi query can retrieve English source and
+     answer in Hindi, with a note.
+
+US-13.3 [P2]
+  As a user, I want additional languages (Marathi, Tamil, Telugu, Bengali,
+  Kannada, Malayalam, Gujarati, Punjabi, Spanish).
+
+--------------------------------------------------------------------------------
+E14 SETTINGS, PRIVACY AND ACCESSIBILITY
+--------------------------------------------------------------------------------
+US-14.1 [MVP]
+  As a user, I want zero analytics, zero accounts and zero network calls
+  except explicit downloads, so my data stays private.
+  AC:
+   - No analytics SDKs. INTERNET permission used only by download manager.
+   - Privacy policy states this; verifiable via network inspection test.
+
+US-14.2 [MVP]
+  As a user, I want to wipe all personal data (history, contacts, supplies,
+  trip cards) in one action.
+
+US-14.3 [MVP]
+  As a user with low vision, I want large text, high contrast and full
+  TalkBack support.
+  AC:
+   - All interactive elements labelled; touch targets >= 48dp.
+   - WCAG 2.2 AA contrast in both themes.
+
+US-14.4 [MVP]
+  As a user, I want to set my country/region, units (metric/imperial) and
+  language.
+
+US-14.5 [P1]
+  As a user, I want an optional app lock (PIN/biometric) for personal data,
+  but emergency features must stay accessible without unlocking.
+
+--------------------------------------------------------------------------------
+E15 CONTENT BUILD PIPELINE (DEVELOPER / CURATOR)
+--------------------------------------------------------------------------------
+US-15.1 [MVP]
+  As a curator, I want to define a pack in YAML (pack_id, domain, language,
+  sources, metadata, chunking params) and build it with one command.
+  AC:
+   - `zs-build --config packs/medical-core.yaml --out dist/`
+   - Deterministic output (same input -> same pack hash).
+
+US-15.2 [MVP]
+  As a curator, I want to ingest sources from HTML, PDF, EPUB, Markdown and
+  DOCX, including scanned PDFs via OCR.
+  AC:
+   - Parsers: trafilatura/BeautifulSoup (HTML), PyMuPDF (PDF), Tesseract
+     (OCR), ebooklib (EPUB), python-docx.
+   - Respect robots.txt and licence; per-source licence field required.
+
+US-15.3 [MVP]
+  As a curator, I want structure-aware chunking (by heading/section/step,
+  target 300-500 tokens, 10-15% overlap) that never splits a numbered
+  procedure in the middle.
+
+US-15.4 [MVP]
+  As a curator, I want each chunk tagged with metadata: domain, category,
+  topic, patient_type, severity, region, language, source_id, section path,
+  licence, reviewed flag.
+
+US-15.5 [MVP]
+  As a curator, I want embeddings generated at build time with the SAME model
+  and quantization used on-device, and stored in the pack.
+  AC:
+   - Embedding model id and dimension recorded in manifest; app refuses
+     mismatched packs.
+
+US-15.6 [MVP]
+  As a curator, I want the build to output a single SQLite file per pack
+  (chunks, FTS5 index, vectors via sqlite-vec, guides, sources, manifest).
+
+US-15.7 [MVP]
+  As a curator, I want a dry-run that exports chunks to JSON/HTML for manual
+  inspection before publishing.
+
+US-15.8 [P1]
+  As a curator, I want optional LLM-assisted rewriting of source text into
+  step format (at build time, on a big model), always flagged
+  "needs human review" until approved.
+
+US-15.9 [P1]
+  As a curator, I want duplicate/near-duplicate detection across sources and
+  conflict detection (two sources giving different advice).
+
+US-15.10 [P1]
+  As a curator, I want packs signed (ed25519) and published to a static CDN
+  (e.g. Cloudflare R2/S3/GitHub Releases) with a catalog JSON.
+
+US-15.11 [P2]
+  As a curator, I want a web UI to manage sources, review chunks and publish.
+
+--------------------------------------------------------------------------------
+E16 CONTENT REVIEW AND GOVERNANCE
+--------------------------------------------------------------------------------
+US-16.1 [MVP]
+  As a medical/mechanical reviewer, I want to approve or reject each guide and
+  protocol card, with my role and date recorded.
+  AC:
+   - Protocol cards cannot ship without reviewer sign-off.
+   - Guide shows "Last reviewed: <date> by <role>".
+
+US-16.2 [MVP]
+  As a product owner, I want every piece of content traceable to its source
+  and licence.
+
+US-16.3 [P1]
+  As a reviewer, I want a scheduled re-review (e.g. yearly, or when source
+  guidelines update - e.g. new CPR guidelines).
+
+US-16.4 [P1]
+  As a user, I want to flag an answer or guide as wrong/unclear; flags are
+  stored locally and optionally exported when I choose to send feedback.
+
+--------------------------------------------------------------------------------
+E17 EVALUATION AND QUALITY ASSURANCE
+--------------------------------------------------------------------------------
+US-17.1 [MVP]
+  As a developer, I want a gold evaluation set (>= 100 questions per domain,
+  incl. adversarial and out-of-scope) with expert-approved reference answers
+  and expected source chunks.
+
+US-17.2 [MVP]
+  As a developer, I want automated metrics per build:
+   - Retrieval: Recall@5, MRR (target Recall@5 >= 0.90).
+   - Faithfulness: % steps supported by cited chunk (target >= 95%).
+   - Citation validity: % citations pointing to retrieved chunks (100%).
+   - Correct refusal rate on out-of-scope / not-in-library (>= 95%).
+   - Red-flag detection recall on emergency queries (>= 99%).
+   - Harmful-advice rate judged by expert (target 0 critical errors).
+
+US-17.3 [MVP]
+  As a developer, I want on-device benchmarks on reference phones
+  (one 6 GB mid-range, one 8 GB mid-range, one flagship): load time, TTFT,
+  tokens/s, peak RAM, battery drain per 10 answers, thermal state.
+
+US-17.4 [MVP]
+  As a developer, I want to compare candidate models (e.g. Llama 3.2 3B,
+  Qwen3.5-2B, Qwen3.5-4B, Gemma 4 E2B, Gemma 4 E4B, Phi-4-mini) on the same
+  eval set and devices, and pick defaults by data.
+
+US-17.5 [P1]
+  As a developer, I want regression tests in CI that fail the build if any
+  metric drops below threshold.
+
+US-17.6 [P1]
+  As a developer, I want expert human review of a random sample of generated
+  answers each release.
+
+--------------------------------------------------------------------------------
+E18 DISTRIBUTION AND MONETISATION
+--------------------------------------------------------------------------------
+US-18.1 [MVP]
+  As a user, I want the core app (library, search, protocol cards, tools,
+  supplies) free.
+
+US-18.2 [P1]
+  As a user, I want to unlock Ask (AI) with a one-time purchase (no
+  subscription), verified offline after purchase.
+  AC:
+   - Google Play Billing; licence cached locally; works offline forever.
+
+US-18.3 [P1]
+  As an NGO/organisation, I want bulk/free licences and side-loadable builds
+  for field teams.
+
+US-18.4 [P2]
+  As a user, I want paid specialist packs (advanced medical, region packs,
+  vehicle-brand packs).
+
+================================================================================
+6. NON-FUNCTIONAL REQUIREMENTS
+================================================================================
+NFR-1  OFFLINE: All features except downloads/sharing/billing work in
+       airplane mode. Automated test: run full UI test suite with network
+       disabled.
+NFR-2  DEVICE SUPPORT: Android 10 (API 29)+; arm64-v8a only.
+       Minimum for library/tools: 3 GB RAM. Minimum for Ask Compact: 6 GB RAM.
+NFR-3  PERFORMANCE (6 GB mid-range reference phone):
+         - Cold app start < 2 s.
+         - Protocol card display < 1 s from query.
+         - Hybrid search < 500 ms p95.
+         - Model load (mmap) < 8 s cold, < 2 s warm.
+         - Time to first token < 4 s; decode >= 8 tok/s (Compact).
+NFR-4  MEMORY: Peak app RSS with Compact model < 2.5 GB; no OOM kills in
+       30-minute soak test; model loaded via mmap.
+NFR-5  STORAGE: Base app <= 150 MB; each knowledge pack <= 300 MB; model
+       packs 1.3-3 GB; show storage usage clearly.
+NFR-6  BATTERY/THERMAL: <= 3% battery per 10 answers on reference device;
+       throttle when thermal status >= SEVERE; always keep enough battery
+       reserve warning (e.g. warn under 20% before using Ask).
+NFR-7  RELIABILITY: Crash-free sessions >= 99.5%; LLM crash must not crash
+       the app (isolate inference in a separate process/service).
+NFR-8  SECURITY: Packs/models signed and verified; personal data encrypted
+       at rest (EncryptedSharedPreferences / SQLCipher for personal DB);
+       no third-party SDKs that phone home.
+NFR-9  PRIVACY: No telemetry; GDPR/DPDP (India) compliant by design as no
+       personal data is collected by the developer.
+NFR-10 ACCESSIBILITY: WCAG 2.2 AA; TalkBack; dynamic font; colour-blind safe
+       severity colours (use icons + text, not colour alone).
+NFR-11 LOCALISATION: All strings externalised; RTL-ready layouts.
+NFR-12 MAINTAINABILITY: Modular architecture (feature modules), >= 70% unit
+       test coverage on retrieval/prompting/validator logic.
+NFR-13 USABILITY UNDER STRESS: Emergency screens usable one-handed, with
+       gloves, in sunlight; max 2 taps to any protocol card.
+
+================================================================================
+7. TECHNICAL ARCHITECTURE AND STACK
+================================================================================
+7.1 High-level flow
+
+  BUILD TIME (developer laptop / CI, Python)
+    sources.yaml -> fetch/parse -> clean -> structure-aware chunk
+      -> metadata tag -> (optional) LLM step-rewrite + human review
+      -> embed (same model as device) -> write pack.sqlite
+         [guides, chunks, FTS5, sqlite-vec vectors, sources, manifest]
+      -> sign -> publish to static CDN + catalog.json
+
+  RUN TIME (Android, fully offline)
+    user query (text/voice)
+      -> language detect -> red-flag detector ---> Protocol Card (instant)
+      -> domain router (medical/survival/vehicle/other)
+      -> query embed (on-device) + FTS5 BM25
+      -> hybrid merge (RRF) + metadata filters (domain, patient type,
+         vehicle profile, region)
+      -> (optional) lightweight rerank
+      -> confidence gate (below threshold -> "Not in library")
+      -> prompt builder (system rules + top-k chunks with ids + question)
+      -> on-device LLM (streaming)
+      -> citation validator -> render answer + source links
+
+7.2 Android app
+  - Language/UI  : Kotlin, Jetpack Compose, Material 3
+  - Architecture : MVVM + Clean Architecture, Hilt DI, Coroutines/Flow
+  - Modules      : :app, :core-ui, :library, :search, :rag, :llm-runtime,
+                   :protocols, :tools, :supplies, :packs, :voice, :settings
+  - Storage      : SQLite (Room for app data; raw SQLite for pack DBs with
+                   FTS5 + sqlite-vec extension) ; alternative: ObjectBox HNSW
+  - LLM runtime  : llama.cpp via JNI (GGUF, mmap) - default
+                   LiteRT-LM (GPU/NPU, Gemma family) - optional backend
+                   MNN - optional backend for Qwen
+  - Embeddings   : EmbeddingGemma-300M or multilingual-e5-small, int8,
+                   via ONNX Runtime Mobile or LiteRT
+  - Voice        : whisper.cpp (STT), Android TextToSpeech (TTS)
+  - Downloads    : WorkManager + resumable HTTP range requests
+  - Location     : FusedLocationProvider with GPS-only fallback
+                   (LocationManager) - no network location required
+  - Sensors      : magnetometer + accelerometer (compass), camera torch
+  - Billing      : Google Play Billing Library
+  - Crypto       : Tink / libsodium (ed25519 signature verify)
+
+7.3 Build pipeline (Python 3.11+)
+  - trafilatura, BeautifulSoup4, PyMuPDF, pytesseract, ebooklib,
+    python-docx, PyYAML, pydantic
+  - sentence-transformers / onnxruntime for embeddings
+  - sqlite3 + sqlite-vec, FTS5
+  - Optional: large LLM (local or API) for build-time step rewriting only
+  - CLI: `zs-build`, `zs-eval`, `zs-sign`, `zs-publish`
+  - (Reusable pieces from ZeroSignal-web: scraper.py, chunker.py,
+    config/YAML pack format, deterministic document ids)
+
+7.4 Backend (minimal, optional)
+  - No inference server. Static hosting only:
+    catalog.json + signed pack/model files on CDN (R2/S3/GitHub Releases).
+  - Optional tiny FastAPI for catalog if dynamic features needed later.
+
+7.5 Prompting rules (system prompt essentials)
+  - Answer ONLY from the numbered context passages.
+  - If the answer is not in the context, say it is not in the library.
+  - Output: summary line, numbered steps each ending with [id], warnings,
+    when to get help.
+  - Never invent medication doses; never contradict a protocol card.
+  - Keep language simple; respond in the user's language.
+  - Max ~350 tokens.
+
+================================================================================
+8. ON-DEVICE MODEL REQUIREMENTS
+================================================================================
+8.1 Target: ~2B-4B parameter instruction model, 4-bit quantized, running on
+    an average Android phone (6-8 GB RAM).
+
+8.2 Candidate models (evaluate per US-17.4):
+    | Model              | Params     | ~Q4 size | Tier         |
+    |--------------------|------------|----------|--------------|
+    | Qwen3.5-2B         | 2B         | ~1.3 GB  | Compact      |
+    | Gemma 4 E2B        | ~2.3B eff. | ~1.5 GB  | Compact      |
+    | Llama 3.2 3B       | 3B         | ~1.9 GB  | Baseline 3B  |
+    | Qwen2.5-3B         | 3B         | ~1.9 GB  | Baseline 3B  |
+    | Phi-4-mini         | 3.8B       | ~2.3 GB  | Recommended  |
+    | Qwen3.5-4B         | 4B         | ~2.5 GB  | Recommended  |
+    | Gemma 4 E4B        | ~4.5B eff. | ~3.0 GB  | Recommended  |
+    | MedGemma 1.5 4B    | 4B         | ~3.5 GB  | Optional med |
+
+8.3 Requirements for any shipped model:
+    - Licence permits commercial redistribution in an app.
+    - Instruction-following score on internal format test >= 95%.
+    - Faithfulness >= 95% on eval set (Section E17).
+    - Meets NFR-3/4/6 on reference 6 GB (Compact) / 8 GB (Recommended) phone.
+    - Supports target languages (English + Hindi minimum for v1.1).
+    - Context window >= 4k tokens.
+
+8.4 Optional: fine-tune (LoRA) the chosen model on synthetic
+    "context -> cited numbered steps" pairs generated from the library and
+    reviewed, to improve format adherence and faithfulness. Merge and
+    re-quantize before shipping.
+
+================================================================================
+9. KNOWLEDGE SOURCES AND LICENSING
+================================================================================
+Every source must have a recorded licence and permission status before
+inclusion. Prefer public-domain and open-licensed material.
+
+EMERGENCY MEDICINE
+  - WHO Basic Emergency Care (check licence: CC BY-NC-SA 3.0 IGO typical)
+  - Wilderness Medical Society Practice Guidelines (check journal licence)
+  - TCCC (Tactical Combat Casualty Care) guidelines (public)
+  - US Army first aid manuals, e.g. TC 4-02.1 (public domain)
+  - CDC first aid / heat / cold / water guidance (public domain)
+  - IFRC / Red Cross international first aid guidelines (check licence)
+  - NDMA (India) guidelines
+  - Hesperian "Where There Is No Doctor" (check redistribution terms)
+  - StatPearls (CC BY-NC-ND - non-commercial restrictions; verify)
+
+SURVIVAL / DISASTER
+  - US Army Survival manual FM 21-76 / ATP 3-50.21 (public domain)
+  - FEMA / Ready.gov (public domain)
+  - NDMA India disaster guidelines, IMD advisories
+  - USGS (earthquakes, landslides), NOAA (weather safety)
+  - CDC water purification / emergency food safety
+
+VEHICLE REPAIR
+  - NHTSA safety resources (public domain)
+  - SAE J2012 / generic OBD-II code descriptions (verify licence of code
+    text; write own descriptions if needed)
+  - Wikibooks automotive (CC BY-SA)
+  - iFixit guides (CC BY-NC-SA - non-commercial; verify)
+  - Original content written and reviewed by certified mechanics
+  - DO NOT scrape copyrighted owner's manuals or Haynes/Chilton manuals.
+
+================================================================================
+10. SAFETY, LEGAL AND DISCLAIMERS
+================================================================================
+S-1  Persistent disclaimer: "Reference information for when help is not
+     available. Not a substitute for professional medical care, emergency
+     services or a qualified mechanic. Call emergency services when you can."
+S-2  Life-threatening intents always show protocol card + emergency number
+     first.
+S-3  LLM never generates medication doses; only static reviewed tables.
+S-4  Low-confidence retrieval -> no generation.
+S-5  Identification features (plants, snakes, mushrooms, wounds from photos)
+     carry prominent "may be wrong - do not eat/treat based on this alone".
+S-6  All protocol cards expert-reviewed and dated.
+S-7  Legal review for medical-device regulation (India CDSCO, EU MDR, US FDA
+     guidance on general wellness/reference apps) before launch.
+S-8  Terms of use, privacy policy, open-source licence notices for all
+     bundled models and libraries.
+S-9  Incident process: if a harmful error is reported, hotfix pack
+     (content update) can be published without an app update.
+
+================================================================================
+11. DATA MODEL (PACK SQLITE)
+================================================================================
+manifest(pack_id, version, domain, language, region, created_at,
+         embedding_model_id, embedding_dim, min_app_version, sha256,
+         signature, reviewer_signoff)
+
+sources(source_id, publisher, title, url, licence, retrieved_at, version)
+
+guides(guide_id, domain, category, title, summary, body_md, warnings,
+       red_flags, patient_types, severity, region, last_reviewed,
+       reviewer_role)
+
+chunks(chunk_id, guide_id, source_id, section_path, text, token_count,
+       domain, category, topic, patient_type, severity, language, order_idx)
+
+chunks_fts  (FTS5 virtual table over chunks.text, guides.title, synonyms)
+chunks_vec  (sqlite-vec virtual table: chunk_id, embedding int8[dim])
+
+protocol_cards(card_id, domain, title, trigger_terms, steps_json,
+               timers_json, emergency_number_key, reviewed_by, reviewed_at)
+
+decision_trees(tree_id, domain, title, nodes_json)   -- vehicle/triage
+static_tables(table_id, kind, data_json, source_id)  -- doses, OBD codes,
+                                                        water needs, etc.
+synonyms(term, canonical, language)
+
+APP (personal, encrypted) DB
+bookmarks, history, emergency_contacts, medical_id, vehicle_profile,
+supplies, trip_cards, breadcrumbs, vitals_log, plans, flags, settings
+
+================================================================================
+12. MILESTONES / RELEASE PLAN
+================================================================================
+M0  Research & setup (2 weeks)
+    - Repo, CI, coding standards, reference devices, licence audit
+    - Model shortlist + first on-device benchmark spike (llama.cpp)
+
+M1  Content pipeline + core library (4 weeks)
+    - E15 MVP stories, first 3 packs (medical-core, survival-core,
+      vehicle-core) in English, ~100 guides total
+    - Protocol cards v1 drafted + expert review started
+
+M2  Android MVP without AI (4 weeks)
+    - E1, E2, E3, E5, E10, E11, E14 MVP stories
+    - Offline test suite
+
+M3  Ask / RAG (4 weeks)
+    - E4, E12 MVP stories, llama.cpp integration, prompt + validator
+    - E17 eval harness + model bake-off, pick Compact/Recommended defaults
+
+M4  Hardening + closed beta (3 weeks)
+    - Performance/thermal/battery tuning, accessibility pass
+    - Expert review of answers, legal review, beta with 50-100 users
+
+M5  Public launch v1.0 (2 weeks)
+    - Play Store listing, billing (Ask unlock), docs, support
+
+M6  v1.1+ (post-launch)
+    - Voice (E13), Hindi, Plan-this-situation (E6), trip card, OBD codes,
+      region packs, LiteRT-LM backend, P2P pack sharing, photo input
+
+================================================================================
+13. OPEN QUESTIONS AND RISKS
+================================================================================
+Q1  Final public product name and trademark search.
+Q2  Which expert reviewers (EMT/doctor, survival instructor, mechanic) and
+    compensation model?
+Q3  Default model licence compatibility for paid unlock (Gemma terms vs
+    Apache 2.0 Qwen vs Llama community licence).
+Q4  Regulatory classification of medical content per target country.
+Q5  How much Hindi content is native-reviewed vs machine-translated in v1.1?
+
+R1  Hallucination in medical advice -> mitigations: RAG-only, confidence
+    gate, citation validator, protocol cards, eval thresholds, expert review.
+R2  Low-end device performance -> Compact tier, mmap, token cap, library
+    works without AI.
+R3  Content licensing violations -> licence field mandatory in pipeline,
+    legal review, prefer public domain / original content.
+R4  Outdated guidelines (e.g. CPR updates) -> scheduled re-review, content
+    hotfix channel.
+R5  Battery drain in real emergencies -> battery-saver mode, warnings,
+    instant non-AI paths.
+
+================================================================================
+14. GLOSSARY
+================================================================================
+RAG            Retrieval-Augmented Generation: retrieve relevant passages,
+               then have the LLM answer only from them.
+FTS5 / BM25    SQLite full-text search and its keyword ranking function.
+sqlite-vec     SQLite extension for vector similarity search.
+RRF            Reciprocal Rank Fusion - merges keyword and vector rankings.
+GGUF           Model file format used by llama.cpp.
+Q4_K_M         A 4-bit quantization level balancing size and quality.
+mmap           Memory-mapped file loading; lets the OS page model weights.
+TTFT           Time to first token.
+Protocol card  Static, expert-reviewed emergency instructions shown without AI.
+Pack           Signed, versioned SQLite bundle of guides, chunks and vectors.
+Red-flag       A query indicating immediate danger to life.
+
+================================================================================
+END OF DOCUMENT
+================================================================================

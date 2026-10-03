@@ -1,0 +1,443 @@
+# Emergency protocol cards (US-5.1/5.2). Static, human-authored, NEVER
+# LLM-generated. reviewed_by / reviewed_at must be filled by an expert
+# reviewer before a --release build (US-16.1).
+- card_id: pc-cpr
+  domain: medical
+  order: 1
+  title: Not breathing - CPR (adult)
+  subtitle: Unresponsive and not breathing normally
+  icon: heart-pulse
+  trigger_terms: [not breathing, stopped breathing, no pulse, cardiac arrest, heart stopped, cpr, unresponsive, collapsed, gasping, no heartbeat, saans nahi, सांस नहीं, दिल की धड़कन बंद]
+  steps:
+    - text: Call the emergency number now. Put the phone on speaker.
+    - text: Send someone to find an AED (defibrillator).
+    - text: Hands in the centre of the chest, one on top of the other.
+    - text: Push hard and fast - 5-6 cm deep, 100-120 per minute.
+      detail: Use the metronome below. Let the chest come fully back up.
+    - text: If trained, give 2 breaths after every 30 pushes. If not, just keep pushing.
+    - text: Switch on the AED as soon as it arrives and follow its voice.
+    - text: Do not stop until they breathe normally or help takes over.
+  do_not: [Do not stop compressions for more than 10 seconds, Do not wait for help before starting]
+  timers:
+    - {id: cpr-start, label: CPR started}
+    - {id: swap, label: Swap rescuer, interval_s: 120}
+  tools: [cpr-metronome]
+  emergency_number_key: ambulance
+  related_guides: [med-cpr-adult, med-recovery-position]
+  sources: [zs-original, ifrc-ifag-2020]
+
+- card_id: pc-cpr-child
+  domain: medical
+  order: 2
+  title: Not breathing - CPR (child)
+  subtitle: Child 1 year to puberty
+  icon: child
+  trigger_terms: [child not breathing, kid not breathing, boy not breathing, girl not breathing, child cpr, child unresponsive, bachcha saans nahi, बच्चा सांस नहीं]
+  steps:
+    - text: Shout for help and call the emergency number on speaker.
+    - text: Tilt the head back, lift the chin. Give 5 rescue breaths.
+    - text: 30 chest pushes - centre of chest, one or two hands, about 5 cm deep.
+    - text: Then 2 breaths. Repeat 30 pushes to 2 breaths at 100-120 per minute.
+    - text: Alone with no phone? Do 1 minute of CPR, then go for help.
+    - text: Use an AED when available (child pads if present).
+  do_not: [Do not delay starting CPR to check for a pulse]
+  timers:
+    - {id: cpr-start, label: CPR started}
+  tools: [cpr-metronome]
+  emergency_number_key: ambulance
+  related_guides: [med-cpr-child-infant]
+  sources: [zs-original, ifrc-ifag-2020]
+
+- card_id: pc-cpr-infant
+  domain: medical
+  order: 3
+  title: Not breathing - CPR (infant)
+  subtitle: Baby under 1 year
+  icon: baby
+  trigger_terms: [baby not breathing, infant not breathing, newborn not breathing, baby blue, baby limp, baby cpr, shishu saans nahi, बच्चे की सांस]
+  steps:
+    - text: Shout for help and call the emergency number on speaker.
+    - text: Keep the head level (neutral). Cover the baby's mouth AND nose with your mouth.
+    - text: Give 5 gentle puffs - just enough to make the chest rise.
+    - text: 30 pushes with 2 fingers just below the nipple line, about 4 cm deep.
+    - text: Then 2 puffs. Repeat 30 to 2 at 100-120 per minute.
+    - text: Carry the baby with you if you must go for help.
+  do_not: [Do not tilt the head far back, Do not blow hard]
+  timers:
+    - {id: cpr-start, label: CPR started}
+  tools: [cpr-metronome]
+  emergency_number_key: ambulance
+  related_guides: [med-cpr-child-infant]
+  sources: [zs-original, ifrc-ifag-2020]
+
+- card_id: pc-choking
+  domain: medical
+  order: 4
+  title: Choking
+  subtitle: Cannot cough, speak or breathe
+  icon: lungs
+  trigger_terms: [choking, choke, something stuck in throat, food stuck, can't breathe eating, swallowed something stuck, gala atak, गले में अटक, दम घुट]
+  steps:
+    - text: Can they cough? Encourage coughing and stay with them.
+    - text: If not - lean them forward, give up to 5 hard back blows between the shoulder blades.
+    - text: Then up to 5 abdominal thrusts - fist above the navel, pull in and up.
+    - text: Pregnant or large person - chest thrusts instead.
+    - text: Infant - 5 back blows face-down on your forearm, then 5 chest thrusts with 2 fingers.
+    - text: Keep alternating. If they go unresponsive - call emergency, start CPR.
+  do_not: [No blind finger sweeps, No abdominal thrusts on infants]
+  emergency_number_key: ambulance
+  related_guides: [med-choking]
+  sources: [zs-original, ifrc-ifag-2020]
+
+- card_id: pc-severe-bleeding
+  domain: medical
+  order: 5
+  title: Severe bleeding
+  subtitle: Spurting, pooling or soaking through
+  icon: droplet
+  trigger_terms: [severe bleeding, bleeding heavily, bleeding a lot, won't stop bleeding, blood spurting, gushing blood, cut artery, lots of blood, amputation, tourniquet, haemorrhage, hemorrhage, bahut khoon, खून बह, बहुत खून]
+  steps:
+    - text: Call the emergency number.
+    - text: Press hard directly on the wound with cloth or your hand. Do not lift.
+    - text: Deep wound - pack it full of cloth or gauze, then keep pressing.
+    - text: Arm or leg still bleeding - tourniquet 5-7 cm above the wound, not on a joint.
+    - text: Tighten until bleeding stops. Note the time.
+      detail: Start the tourniquet timer below. It will hurt - that is expected.
+    - text: Lay them down, keep warm, watch for shock.
+  do_not: [Do not remove a tourniquet, Do not remove embedded objects]
+  timers:
+    - {id: tourniquet, label: Tourniquet applied}
+  emergency_number_key: ambulance
+  related_guides: [med-severe-bleeding, med-shock]
+  sources: [zs-original, us-army-tc-4-02-1]
+
+- card_id: pc-shock
+  domain: medical
+  order: 6
+  title: Shock
+  subtitle: Pale, cold, sweaty, fast pulse
+  icon: thermometer-down
+  trigger_terms: [shock, pale and clammy, cold sweaty skin, going grey, weak pulse, fainting after injury]
+  steps:
+    - text: Call the emergency number.
+    - text: Stop any bleeding first.
+    - text: Lay them flat. Raise legs slightly if no leg, hip or spine injury.
+    - text: Keep warm - blanket under and over.
+    - text: Loosen tight clothing. Reassure. Nothing to eat or drink.
+    - text: Check breathing every few minutes. CPR if it stops.
+  do_not: [No food or drink, Do not leave them alone]
+  emergency_number_key: ambulance
+  related_guides: [med-shock]
+  sources: [zs-original, us-army-tc-4-02-1]
+
+- card_id: pc-anaphylaxis
+  domain: medical
+  order: 7
+  title: Anaphylaxis
+  subtitle: Severe allergic reaction
+  icon: allergy
+  trigger_terms: [anaphylaxis, anaphylactic, severe allergic, allergic reaction, throat swelling, tongue swelling, swollen throat, epipen, epinephrine, adrenaline, bee sting breathing, allergy breathing]
+  steps:
+    - text: Use their adrenaline auto-injector NOW - outer thigh, through clothes if needed.
+    - text: Call the emergency number - say "anaphylaxis".
+    - text: Lie flat, legs raised. Sit up only if breathing is hard.
+    - text: No improvement in 5 minutes - give a second auto-injector if available.
+    - text: Keep lying down even if better. CPR if breathing stops.
+  do_not: [Do not let them stand or walk, Do not rely on antihistamine tablets]
+  timers:
+    - {id: adrenaline, label: Adrenaline given, interval_s: 300}
+  emergency_number_key: ambulance
+  related_guides: [med-anaphylaxis]
+  sources: [zs-original, ifrc-ifag-2020]
+
+- card_id: pc-heart-attack
+  domain: medical
+  order: 8
+  title: Heart attack signs
+  subtitle: Chest pain, sweating, breathless
+  icon: heart
+  trigger_terms: [heart attack, chest pain, crushing chest, chest tightness, pain in left arm, pain spreading to arm, angina, dil ka daura, दिल का दौरा, सीने में दर्द, seene mein dard]
+  steps:
+    - text: Call the emergency number now.
+    - text: Sit them down, half-sitting, knees bent. Keep them still.
+    - text: Help with their own prescribed angina spray or tablets.
+    - text: Aspirin only if the emergency dispatcher advises and they are not allergic.
+    - text: Stay with them. Be ready to start CPR.
+  do_not: [Do not let them walk around, Do not wait for the pain to pass]
+  timers:
+    - {id: onset, label: Pain started}
+  emergency_number_key: ambulance
+  related_guides: [med-heart-attack, med-cpr-adult]
+  sources: [zs-original, ifrc-ifag-2020]
+
+- card_id: pc-stroke
+  domain: medical
+  order: 9
+  title: Stroke (BE-FAST)
+  subtitle: Face, arm, speech - time matters
+  icon: brain
+  trigger_terms: [stroke, face drooping, face droop, slurred speech, arm weakness, can't lift arm, one side weak, sudden confusion, paralysis, lakwa, लकवा, मुंह टेढ़ा]
+  steps:
+    - text: "Check: Balance, Eyes, Face drooping, Arm weakness, Speech."
+    - text: Any sign - call the emergency number NOW.
+    - text: Note the time symptoms started (start timer).
+    - text: Lie them down, head and shoulders slightly raised. Recovery position if drowsy.
+    - text: Nothing to eat or drink.
+  do_not: ["No food, drink or medicines", Do not give aspirin, Do not wait to see if it improves]
+  timers:
+    - {id: onset, label: Symptoms started}
+  emergency_number_key: ambulance
+  related_guides: [med-stroke]
+  sources: [zs-original, ifrc-ifag-2020]
+
+- card_id: pc-seizure
+  domain: medical
+  order: 10
+  title: Seizure (fits)
+  subtitle: Jerking, stiffening, unresponsive
+  icon: zap
+  trigger_terms: [seizure, fits, having a fit, convulsion, convulsing, epilepsy, epileptic fit, shaking uncontrollably, mirgi, मिर्गी, दौरा पड़]
+  steps:
+    - text: Start the seizure timer.
+    - text: Move hard objects away. Cushion the head.
+    - text: Do not hold them down. Nothing in the mouth.
+    - text: When jerking stops - roll into the recovery position.
+    - text: Over 5 minutes, or a second seizure - call the emergency number.
+  do_not: [Nothing in the mouth, Do not restrain, No water or food until alert]
+  timers:
+    - {id: seizure, label: Seizure started, interval_s: 300}
+  emergency_number_key: ambulance
+  related_guides: [med-seizures, med-recovery-position]
+  sources: [zs-original, ifrc-ifag-2020]
+
+- card_id: pc-burns
+  domain: medical
+  order: 11
+  title: Burns
+  subtitle: Cool, cover, call
+  icon: flame
+  trigger_terms: [burn, burns, burnt, burned, scald, scalded, clothes on fire, boiling water spilled, chemical burn, jal gaya, जल गया, जला]
+  steps:
+    - text: Stop the burning. Clothes on fire - stop, drop, roll.
+    - text: Cool under cool running water for 20 minutes.
+      detail: Start the 20-minute timer. Not ice.
+    - text: Remove rings, watches, tight clothing - unless stuck.
+    - text: Cover loosely with cling film or a clean non-fluffy cloth.
+    - text: Keep them warm. Large, facial, hand or airway burns - call the emergency number.
+  do_not: ["No ice, butter, toothpaste or oil", Do not burst blisters, Do not pull off stuck clothing]
+  timers:
+    - {id: cooling, label: Cooling started, interval_s: 1200}
+  emergency_number_key: ambulance
+  related_guides: [med-burns]
+  sources: [zs-original, ifrc-ifag-2020]
+
+- card_id: pc-head-spine
+  domain: medical
+  order: 12
+  title: Head, neck or spine injury
+  subtitle: Fall, crash, dive, heavy blow
+  icon: spine
+  trigger_terms: [neck injury, spine injury, spinal injury, back injury, fell from height, diving injury, head injury, hit head, knocked out, can't move legs, can't feel legs]
+  steps:
+    - text: Call the emergency number.
+    - text: Tell them not to move. Hold the head still, in line with the body.
+    - text: Breathing? Keep them as found, keep holding the head.
+    - text: Not breathing normally? Open the airway and start CPR - breathing comes first.
+    - text: Only move them if in danger - roll as one unit, head and body in line.
+  do_not: [Do not move them unnecessarily, Do not remove a helmet unless needed for breathing]
+  emergency_number_key: ambulance
+  related_guides: [med-spinal-injury, med-head-injury]
+  sources: [zs-original, ifrc-ifag-2020]
+
+- card_id: pc-heatstroke
+  domain: medical
+  order: 13
+  title: Heatstroke
+  subtitle: Hot and confused - cool NOW
+  icon: sun
+  trigger_terms: [heatstroke, heat stroke, sunstroke, overheated and confused, collapsed in heat, collapsed in the heat, confused in the heat, hot and confused, loo lag gayi, लू लग]
+  steps:
+    - text: Call the emergency number.
+    - text: Move to shade. Remove extra clothing.
+    - text: Cool fast - immerse in cool water up to the neck if possible.
+    - text: Otherwise soak with water and fan hard. Ice packs at neck, armpits, groin.
+    - text: Keep cooling until alert or help arrives.
+  do_not: [No drinks if confused, No paracetamol or aspirin for heatstroke]
+  timers:
+    - {id: cooling, label: Cooling started}
+  emergency_number_key: ambulance
+  related_guides: [med-heat-illness]
+  sources: [zs-original, cdc-emergency]
+
+- card_id: pc-hypothermia
+  domain: medical
+  order: 14
+  title: Hypothermia
+  subtitle: Very cold, shivering or drowsy
+  icon: snowflake
+  trigger_terms: [hypothermia, freezing cold, shivering badly, stopped shivering, too cold confused, frostbite]
+  steps:
+    - text: Get out of wind and wet. Handle gently, keep lying down.
+    - text: Replace wet clothes with dry ones.
+    - text: Insulate from the ground. Wrap in blankets, cover the head.
+    - text: Warm packs on chest, armpits and back - not directly on skin.
+    - text: Alert and can swallow? Warm sweet drinks.
+    - text: Drowsy, confused or unresponsive - call the emergency number.
+  do_not: [Do not rub the skin, No alcohol, No direct fire or hot water on skin]
+  emergency_number_key: ambulance
+  related_guides: [med-hypothermia-frostbite]
+  sources: [zs-original, wms-guidelines]
+
+- card_id: pc-drowning
+  domain: medical
+  order: 15
+  title: Drowning
+  subtitle: Pulled from water
+  icon: waves
+  trigger_terms: [drowning, drowned, nearly drowned, pulled from water, pulled from the water, pulled out of the water, out of the lake, out of the river, out of the pool, fell in the river, fell in the lake, fell in water unconscious, unconscious in water, dooba, डूब]
+  steps:
+    - text: Reach or throw - do not go in unless trained.
+    - text: Out of the water - check breathing.
+    - text: Not breathing - call emergency, 5 rescue breaths, then CPR 30:2.
+    - text: Breathing - recovery position, keep warm.
+    - text: Everyone rescued goes to hospital.
+  do_not: [Do not press on the belly to drain water, Do not enter moving or flood water]
+  tools: [cpr-metronome]
+  emergency_number_key: ambulance
+  related_guides: [med-drowning]
+  sources: [zs-original, ifrc-ifag-2020]
+
+- card_id: pc-snakebite
+  domain: medical
+  order: 16
+  title: Snakebite
+  subtitle: Keep still - go to hospital
+  icon: snake
+  trigger_terms: [snakebite, snake bite, bitten by a snake, bitten by snake, snake bit, cobra, krait, viper, saanp ne kata, saap, सांप ने काटा, सांप]
+  steps:
+    - text: Move away from the snake. Do not try to catch it.
+    - text: Start the timer. Keep the person calm and still.
+    - text: Remove rings, bangles, watches, tight clothing.
+    - text: Splint the limb, keep it at heart level.
+    - text: Get to a hospital with antivenom FAST. Carry them if possible.
+    - text: Breathing stops - rescue breaths / CPR.
+  do_not: [No cutting or sucking, No tourniquet, "No ice, herbs or chemicals", Do not wait for symptoms]
+  timers:
+    - {id: bite, label: Time of bite}
+  emergency_number_key: ambulance
+  related_guides: [med-snakebite]
+  sources: [zs-original, who-bec]
+
+- card_id: pc-poisoning
+  domain: medical
+  order: 17
+  title: Poisoning
+  subtitle: Swallowed, inhaled or on skin
+  icon: flask
+  trigger_terms: [poisoning, poisoned, swallowed poison, drank kerosene, drank pesticide, pesticide, overdose, took too many pills, ate rat poison, swallowed bleach, zeher, जहर, ज़हर]
+  steps:
+    - text: Keep yourself safe - fresh air, gloves.
+    - text: Unresponsive? Check breathing, recovery position or CPR.
+    - text: Call the emergency number or poison centre.
+    - text: Keep the container, label or plant for medics.
+    - text: Chemical on skin - remove clothes, rinse 20 minutes.
+  do_not: [Do not make them vomit, "No salt water, milk or remedies", Nothing by mouth if drowsy]
+  emergency_number_key: ambulance
+  related_guides: [med-poisoning]
+  sources: [zs-original, who-bec]
+
+- card_id: pc-fracture
+  domain: medical
+  order: 18
+  title: Fractures
+  subtitle: Suspected broken bone
+  icon: bone
+  trigger_terms: [broken bone, fracture, broken leg, broken arm, bone sticking out, open fracture, haddi tooti, हड्डी टूट]
+  steps:
+    - text: Keep still. Support the limb as found.
+    - text: Bone through skin - cover with a clean dressing, press around it.
+    - text: Check fingers or toes - warm, pink, can feel?
+    - text: Splint only if you must move - joint above and below.
+    - text: Thigh or pelvis injury - call the emergency number, watch for shock.
+  do_not: [Do not straighten the limb, Do not push bone back in]
+  emergency_number_key: ambulance
+  related_guides: [med-fractures]
+  sources: [zs-original, us-army-tc-4-02-1]
+
+- card_id: pc-diabetic
+  domain: medical
+  order: 19
+  title: Diabetic emergency
+  subtitle: Shaky, sweaty, confused
+  icon: candy
+  trigger_terms: [low sugar, low blood sugar, hypoglycaemia, hypoglycemia, diabetic confused, diabetic shaking, diabetic collapsed, sugar low, sugar kam]
+  steps:
+    - text: Awake and can swallow? Give sugar - juice, sweets, sugary drink, glucose.
+    - text: Start the 15-minute timer.
+    - text: Not better in 15 minutes - give sugar again.
+    - text: Better? Give a snack like bread or biscuits.
+    - text: Drowsy or unresponsive - recovery position, call the emergency number.
+  do_not: [Nothing by mouth if unconscious, Do not give insulin]
+  timers:
+    - {id: sugar, label: Sugar given, interval_s: 900}
+  emergency_number_key: ambulance
+  related_guides: [med-diabetic-emergency]
+  sources: [zs-original, ifrc-ifag-2020]
+
+- card_id: pc-asthma
+  domain: medical
+  order: 20
+  title: Asthma attack
+  subtitle: Wheezing, can't breathe
+  icon: wind
+  trigger_terms: [asthma attack, asthma, can't breathe, cannot breathe, wheezing badly, inhaler not working, breathless can't talk, saans phool, सांस फूल, दमा]
+  steps:
+    - text: Sit them upright, leaning slightly forward.
+    - text: Help them use their reliever inhaler as their plan says - use a spacer if available.
+    - text: Slow, steady breaths. Stay calm.
+    - text: No better in a few minutes - repeat as their plan says and call the emergency number.
+    - text: Collapses and stops breathing - CPR.
+  do_not: [Do not lie them down, Do not leave them alone]
+  emergency_number_key: ambulance
+  related_guides: [med-asthma]
+  sources: [zs-original, ifrc-ifag-2020]
+
+- card_id: pc-electric-shock
+  domain: medical
+  order: 21
+  title: Electric shock
+  subtitle: Power off first
+  icon: bolt
+  trigger_terms: [electric shock, electrocuted, electrocution, touched live wire, got current, current laga, करंट]
+  steps:
+    - text: Do NOT touch them until the power is off.
+    - text: Switch off at the mains, or push the source away with dry wood.
+    - text: High-voltage line? Stay 18 m away, call emergency and the power company.
+    - text: Once safe - check breathing, CPR if needed.
+    - text: Cool burns under running water.
+  do_not: [No bare hands while power is on, Never approach fallen power lines]
+  tools: [cpr-metronome]
+  emergency_number_key: ambulance
+  related_guides: [med-electric-shock]
+  sources: [zs-original, ifrc-ifag-2020]
+
+- card_id: pc-childbirth
+  domain: medical
+  order: 22
+  title: Emergency childbirth
+  subtitle: Baby is coming
+  icon: baby
+  trigger_terms: [baby is coming, giving birth, in labour, in labor, water broke, waters broke, delivery now, baby crowning, prasav, प्रसव]
+  steps:
+    - text: Call the emergency number or a midwife.
+    - text: Wash hands. Clean towels, warm blanket, clean area.
+    - text: Support the head as it comes - do not pull.
+    - text: Baby onto mother's chest, skin to skin. Dry and cover both.
+    - text: Baby not breathing after drying - start newborn rescue breaths.
+    - text: No rush to cut the cord. Watch the mother for heavy bleeding.
+  do_not: [Do not pull the baby or cord, Nothing into the vagina]
+  timers:
+    - {id: birth, label: Baby born}
+  emergency_number_key: ambulance
+  related_guides: [med-childbirth]
+  sources: [zs-original, who-bec]

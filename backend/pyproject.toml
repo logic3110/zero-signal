@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zerosignal"
+version = "0.1.0"
+description = "ZeroSignal content pipeline, offline RAG engine and catalog API"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.6",
+    "PyYAML>=6.0",
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+    "httpx>=0.27",
+    "cryptography>=42",
+]
+
+[project.optional-dependencies]
+# Source ingestion parsers (US-15.2). Each is imported lazily, so a pack that
+# only uses Markdown guides builds without them.
+parsers = [
+    "beautifulsoup4>=4.12",
+    "trafilatura>=1.8",
+    "pymupdf>=1.24",
+    "pytesseract>=0.3",
+    "ebooklib>=0.18",
+    "python-docx>=1.1",
+]
+# Real semantic embeddings (EmbeddingGemma / multilingual-e5-small).
+embeddings = ["sentence-transformers>=3.0"]
+# Claude API answer backend (development stand-in for the on-device model).
+anthropic = ["anthropic>=1.10"]
+dev = ["pytest>=8", "pytest-asyncio>=0.23"]
+
+[project.scripts]
+zs-build = "zerosignal.build:main"
+zs-eval = "zerosignal.evaluate:main"
+zs-sign = "zerosignal.sign:main"
+zs-publish = "zerosignal.publish:main"
+zs-serve = "zerosignal.api.app:main"
+
+[tool.setuptools.packages.find]
+include = ["zerosignal*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

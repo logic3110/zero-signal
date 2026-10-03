@@ -1,0 +1,216 @@
+# Deterministic, reviewed decision trees (US-9.2). The LLM may explain a
+# result but never replaces the tree.
+- tree_id: veh-wont-start
+  domain: vehicle
+  title: Car won't start
+  description: Narrow down why the engine will not start, step by step.
+  start: q-lights
+  sources: [zs-original, nhtsa-safety]
+  nodes:
+    - id: q-lights
+      text: When you turn the key or press start, do the dashboard lights come on?
+      options:
+        - {label: "No lights at all", next: r-no-power}
+        - {label: "Lights come on", next: q-sound}
+    - id: q-sound
+      text: What happens when you try to start?
+      options:
+        - {label: "Rapid clicking", next: r-weak-battery}
+        - {label: "One loud click, then nothing", next: r-starter}
+        - {label: "Nothing - silence", next: q-gear}
+        - {label: "Engine cranks but won't fire", next: q-fuel}
+    - id: q-gear
+      text: Is the car in Park / Neutral, with the clutch or brake pedal fully pressed?
+      options:
+        - {label: "Yes", next: r-immobiliser}
+        - {label: "No / not sure", next: r-gear}
+    - id: q-fuel
+      text: Is there fuel in the tank (gauge above empty)?
+      options:
+        - {label: "Yes", next: q-smell}
+        - {label: "No / low", next: r-no-fuel}
+    - id: q-smell
+      text: Do you smell strong fuel after several attempts?
+      options:
+        - {label: "Yes", next: r-flooded}
+        - {label: "No", next: r-ignition-fuel}
+    - id: r-no-power
+      kind: result
+      severity: check-soon
+      text: No power - battery completely flat or disconnected
+      detail: Check the battery terminals for looseness or white/green corrosion; clean and tighten them. Then try a jump start.
+      guide_id: veh-dead-battery
+    - id: r-weak-battery
+      kind: result
+      severity: check-soon
+      text: Weak or flat battery
+      detail: Rapid clicking means the battery has some charge but not enough to turn the starter. Jump-start the car, then drive 20-30 minutes.
+      guide_id: veh-jump-start
+    - id: r-starter
+      kind: result
+      severity: check-soon
+      text: Possible starter motor or connection fault
+      detail: With bright lights and a single click, the battery is probably fine. Check the starter's cable connection; a manual car may be push-started. Get the starter checked.
+      guide_id: veh-dead-battery
+    - id: r-gear
+      kind: result
+      severity: info
+      text: Safety interlock - gear or pedal position
+      detail: Automatic cars start only in Park or Neutral; many cars need the clutch or brake pedal fully pressed. Try again.
+      guide_id: veh-dead-battery
+    - id: r-immobiliser
+      kind: result
+      severity: check-soon
+      text: Key or immobiliser problem
+      detail: Look for a flashing key or lock symbol. Try the spare key, or replace the key fob battery. Hold the fob against the start button.
+      guide_id: veh-dead-battery
+    - id: r-no-fuel
+      kind: result
+      severity: info
+      text: Out of fuel
+      detail: Add the correct fuel. Diesel engines may need the fuel system primed after running dry.
+      guide_id: veh-wrong-fuel
+    - id: r-flooded
+      kind: result
+      severity: info
+      text: Engine flooded with fuel
+      detail: Wait 10-15 minutes. Then hold the accelerator fully down and crank for a few seconds (older petrol engines), then try normally.
+      guide_id: veh-dead-battery
+    - id: r-ignition-fuel
+      kind: result
+      severity: stop
+      text: Ignition or fuel delivery fault
+      detail: Could be the fuel pump, a fuse or relay, or the ignition system. Check the fuel pump fuse. If you put in the wrong fuel, do not keep cranking. Call for help.
+      guide_id: veh-fuses
+
+- tree_id: veh-smoke
+  domain: vehicle
+  title: Smoke from the car
+  description: Work out what smoke means and whether it is safe to continue.
+  start: q-where
+  sources: [zs-original, nhtsa-safety]
+  nodes:
+    - id: q-where
+      text: Where is the smoke coming from?
+      options:
+        - {label: "Under the bonnet / hood", next: q-flames}
+        - {label: "Exhaust pipe", next: q-colour}
+        - {label: "From a wheel", next: r-brake-drag}
+        - {label: "Inside the cabin", next: r-cabin}
+    - id: q-flames
+      text: Can you see flames, or is the smoke thick and black?
+      options:
+        - {label: "Yes", next: r-fire}
+        - {label: "No - white vapour that smells sweet", next: r-coolant}
+        - {label: "No - bluish smoke, burning oil smell", next: r-oil-leak}
+    - id: q-colour
+      text: What colour is the exhaust smoke?
+      options:
+        - {label: "Thick white, sweet smell", next: r-head-gasket}
+        - {label: "Blue / grey", next: r-burning-oil}
+        - {label: "Black", next: r-rich}
+        - {label: "Thin white on a cold morning", next: r-condensation}
+    - id: r-fire
+      kind: result
+      severity: stop
+      text: Possible vehicle fire - get out now
+      detail: Stop, engine off, everyone out and 30 m away. Do not open the bonnet. Call the fire service.
+      guide_id: veh-vehicle-fire
+    - id: r-coolant
+      kind: result
+      severity: stop
+      text: Coolant leak / overheating
+      detail: Pull over and switch off. Do not open the radiator cap while hot. Follow the overheating guide.
+      guide_id: veh-overheating
+    - id: r-oil-leak
+      kind: result
+      severity: check-soon
+      text: Oil dripping on the hot exhaust
+      detail: Let it cool, check the oil level and look for leaks around the engine. Drive gently to a mechanic if the level is OK.
+      guide_id: veh-leaks
+    - id: r-head-gasket
+      kind: result
+      severity: stop
+      text: Coolant burning in the engine (possible head gasket failure)
+      detail: Stop driving. Check the coolant level when cool. Continuing can destroy the engine.
+      guide_id: veh-noises-smells
+    - id: r-burning-oil
+      kind: result
+      severity: check-soon
+      text: Engine burning oil
+      detail: Check the oil level and top up. Get it checked soon; do not let the oil run low.
+      guide_id: veh-noises-smells
+    - id: r-rich
+      kind: result
+      severity: check-soon
+      text: Too much fuel (running rich)
+      detail: Often a clogged air filter or sensor fault. Drivable short distances; get it checked.
+      guide_id: veh-noises-smells
+    - id: r-condensation
+      kind: result
+      severity: info
+      text: Normal condensation
+      detail: Thin white vapour that disappears once the engine warms up is normal.
+      guide_id: veh-noises-smells
+    - id: r-brake-drag
+      kind: result
+      severity: stop
+      text: Overheating brake or dragging brake
+      detail: Stop and let it cool. Check the handbrake is fully released. Do not touch the wheel - it can be very hot. Get the brakes checked.
+      guide_id: veh-brakes
+    - id: r-cabin
+      kind: result
+      severity: stop
+      text: Electrical smoke in the cabin
+      detail: Pull over, switch off the engine and get out. Electrical fires can spread quickly.
+      guide_id: veh-vehicle-fire
+
+- tree_id: veh-vibration
+  domain: vehicle
+  title: Vibration or shaking
+  description: Find the likely cause of shaking or vibration while driving.
+  start: q-when
+  sources: [zs-original, nhtsa-safety]
+  nodes:
+    - id: q-when
+      text: When do you feel the vibration?
+      options:
+        - {label: "Only when braking", next: r-discs}
+        - {label: "At certain speeds (e.g. above 80 km/h)", next: r-balance}
+        - {label: "All the time, getting worse", next: q-tyre}
+        - {label: "When idling / stopped", next: r-misfire}
+    - id: q-tyre
+      text: Look at the tyres. Is there a bulge, flat spot, or is a tyre low?
+      options:
+        - {label: "Yes", next: r-tyre-damage}
+        - {label: "No", next: r-loose-wheel}
+    - id: r-discs
+      kind: result
+      severity: check-soon
+      text: Warped brake discs
+      detail: Braking still works but the discs need checking. Avoid hard braking and get them inspected.
+      guide_id: veh-brakes
+    - id: r-balance
+      kind: result
+      severity: check-soon
+      text: Wheel balance or alignment
+      detail: Commonly a lost balance weight. Drive below the speed where it shakes and have wheels balanced.
+      guide_id: veh-noises-smells
+    - id: r-tyre-damage
+      kind: result
+      severity: stop
+      text: Damaged tyre - risk of burst
+      detail: Stop and fit the spare. Do not drive on a tyre with a bulge.
+      guide_id: veh-flat-tyre
+    - id: r-loose-wheel
+      kind: result
+      severity: stop
+      text: Possibly loose wheel nuts or suspension damage
+      detail: Stop safely and check wheel nuts are tight. If they are, drive slowly to a mechanic.
+      guide_id: veh-flat-tyre
+    - id: r-misfire
+      kind: result
+      severity: check-soon
+      text: Engine misfire or worn engine mounts
+      detail: If the engine light is flashing, reduce speed and stop driving soon. Otherwise get it checked.
+      guide_id: veh-warning-lights

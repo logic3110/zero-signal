@@ -1,0 +1,58 @@
+- tree_id: med-start-triage
+  domain: medical
+  title: START triage (multiple casualties)
+  description: Sort each casualty in about 30 seconds so the most urgent get help first.
+  start: q-walk
+  sources: [zs-original, who-bec]
+  nodes:
+    - id: q-walk
+      text: Can the person walk?
+      options:
+        - {label: "Yes", next: r-green}
+        - {label: "No", next: q-breathing}
+    - id: q-breathing
+      text: Are they breathing?
+      options:
+        - {label: "Yes", next: q-rate}
+        - {label: "No", next: q-airway}
+    - id: q-airway
+      text: Open the airway (tilt head, lift chin). Do they breathe now?
+      options:
+        - {label: "Yes", next: r-red}
+        - {label: "No", next: r-black}
+    - id: q-rate
+      text: Breathing rate over 30 per minute?
+      options:
+        - {label: "Yes", next: r-red}
+        - {label: "No", next: q-perfusion}
+    - id: q-perfusion
+      text: Radial (wrist) pulse present AND nail bed pinks up in under 2 seconds?
+      options:
+        - {label: "Yes", next: q-mental}
+        - {label: "No", next: r-red}
+    - id: q-mental
+      text: Can they follow a simple command, like "squeeze my hand"?
+      options:
+        - {label: "Yes", next: r-yellow}
+        - {label: "No", next: r-red}
+    - id: r-green
+      kind: result
+      severity: green
+      text: GREEN - Minor
+      detail: Direct them to a safe gathering point. Re-check later.
+    - id: r-yellow
+      kind: result
+      severity: yellow
+      text: YELLOW - Delayed
+      detail: Serious but can wait. Keep warm, re-check regularly.
+    - id: r-red
+      kind: result
+      severity: red
+      text: RED - Immediate
+      detail: Needs help first. Control major bleeding, position the airway, move on.
+      guide_id: med-severe-bleeding
+    - id: r-black
+      kind: result
+      severity: black
+      text: BLACK - Expectant / deceased
+      detail: Not breathing after airway opened. Move on to the next casualty.
